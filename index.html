@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document Preview — Demo</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f5f5f5;
+        color: #333;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #111 0%, #1a1a2e 100%);
+        color: #fff;
+        padding: 64px 40px 48px;
+        text-align: center;
+      }
+      .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+      .hero p { font-size: 15px; color: #9ca3af; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+      .hero .badge {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.1);
+        font-size: 12px;
+        color: #93c5fd;
+        letter-spacing: 0.5px;
+      }
+
+      .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+      section { padding: 48px 0; }
+      section + section { border-top: 1px solid #e5e7eb; }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .section-desc {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 24px;
+      }
+
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+      .card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: box-shadow 0.2s, transform 0.15s;
+      }
+      .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+      .card:focus-visible {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+      }
+      .card svg { width: 48px; height: 48px; margin-bottom: 12px; color: #666; }
+      .card .name { font-size: 14px; font-weight: 500; }
+      .card .type { font-size: 11px; color: #9ca3af; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+      .code-block {
+        background: #1e1e2e;
+        border-radius: 10px;
+        padding: 20px 24px;
+        overflow-x: auto;
+        position: relative;
+      }
+      .code-block pre {
+        font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        color: #e4e4e7;
+      }
+      .code-block .comment { color: #6b7280; }
+      .code-block .keyword { color: #c792ea; }
+      .code-block .string { color: #c3e88d; }
+      .code-block .tag { color: #f07178; }
+      .code-block .attr { color: #ffcb6b; }
+      .code-block .punctuation { color: #89ddff; }
+      .code-block .function { color: #82aaff; }
+      .code-block .number { color: #f78c6c; }
+
+      .api-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .api-table th {
+        text-align: left;
+        padding: 10px 12px;
+        background: #f9fafb;
+        border-bottom: 2px solid #e5e7eb;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #6b7280;
+      }
+      .api-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #f3f4f6;
+        vertical-align: top;
+      }
+      .api-table code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #1f2937;
+      }
+      .api-table .type-badge {
+        display: inline-block;
+        padding: 1px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+      .type-prop { background: #dbeafe; color: #1d4ed8; }
+      .type-event { background: #fce7f3; color: #be185d; }
+      .type-attr { background: #d1fae5; color: #047857; }
+
+      .demo-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+        align-items: center;
+      }
+      .demo-controls button {
+        padding: 8px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+      }
+      .demo-controls button:hover {
+        background: #f9fafb;
+        border-color: #9ca3af;
+      }
+      .demo-controls button.primary {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: #fff;
+      }
+      .demo-controls button.primary:hover { background: #1d4ed8; }
+
+      .event-log {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 12px;
+        font-size: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        min-height: 40px;
+        color: #6b7280;
+      }
+      .event-log .entry { color: #1f2937; padding: 2px 0; }
+      .event-log .entry .time { color: #9ca3af; }
+
+      .footer {
+        text-align: center;
+        padding: 24px;
+        font-size: 12px;
+        color: #9ca3af;
+        border-top: 1px solid #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="hero">
+      <div class="badge">Web Component — Lit</div>
+      <h1>&lt;document-preview&gt;</h1>
+      <p>Framework-agnostic document preview lightbox. Supports images, PDFs, and other file types with keyboard navigation.</p>
+    </div>
+
+    <div class="container">
+
+      <!-- Demo Grid -->
+      <section>
+        <h2 class="section-title">Modal Demo</h2>
+        <p class="section-desc">Click any card to open the preview lightbox. Use <kbd>←</kbd> <kbd>→</kbd> to navigate, <kbd>Esc</kbd> to close.</p>
+
+        <div class="grid" id="demo-grid"></div>
+
+        <demo-controls class="demo-controls">
+          <button class="primary" id="btn-open-first">Open First Item</button>
+          <button id="btn-toggle-event">Enable Event Logging</button>
+        </demo-controls>
+
+        <div class="event-log" id="event-log">Waiting for events…</div>
+      </section>
+
+      <!-- Full-Page Demo -->
+      <section>
+        <h2 class="section-title">Full-Page Demo (Dialog-like)</h2>
+        <p class="section-desc">Preview attachments in full-page mode like a dialog box. This provides a focused viewing experience while maintaining the same-screen context.</p>
+
+        <demo-controls class="demo-controls">
+          <button class="primary" id="btn-open-inline">Open Full-Page Preview</button>
+          <button id="btn-close-inline">Close Preview</button>
+          <button id="btn-next-inline">Next Item</button>
+          <button id="btn-prev-inline">Previous Item</button>
+        </demo-controls>
+
+        <div style="margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Full-Page Preview Component</h3>
+          <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">The preview component is embedded here but will display full-page when opened:</p>
+          <document-preview id="inline-preview" display-mode="inline"></document-preview>
+        </div>
+      </section>
+
+      <!-- How to Use -->
+      <section>
+        <h2 class="section-title">How to Use</h2>
+        <p class="section-desc">Install via npm or use directly from a CDN.</p>
+
+        <div class="code-block">
+          <pre><span class="comment"># Install</span>
+<span class="punctuation">$</span> npm install document-preview</pre>
+        </div>
+
+        <p style="margin:16px 0 8px;font-size:13px;color:#6b7280;">Then import and use in your project:</p>
+
+        <div class="code-block">
+          <pre><span class="keyword">import</span> <span class="string">'document-preview'</span>;
+
+<span class="comment">// Define your items</span>
+<span class="keyword">const</span> items = [
+  { url: <span class="string">'image.jpg'</span>, type: <span class="string">'image'</span>, name: <span class="string">'Photo'</span> },
+  { url: <span class="string">'doc.pdf'</span>,   type: <span class="string">'pdf'</span>,   name: <span class="string">'Document'</span> },
+  { url: <span class="string">'file.zip'</span>,  type: <span class="string">'other'</span>, name: <span class="string">'Archive'</span> },
+];
+
+<span class="comment">// Get the element</span>
+<span class="keyword">const</span> preview = <span class="function">document.querySelector</span>(<span class="string">'document-preview'</span>);
+
+<span class="comment">// Open at a specific index</span>
+preview.items = items;
+preview.initialIndex = <span class="number">0</span>;
+preview.open = <span class="keyword">true</span>;
+
+<span class="comment">// Listen for events</span>
+preview.<span class="function">addEventListener</span>(<span class="string">'close'</span>, <span class="punctuation">()</span> => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'closed'</span>));
+preview.<span class="function">addEventListener</span>(<span class="string">'download'</span>, <span class="punctuation">(</span>e<span class="punctuation">)</span> => <span class="function">console</span>.<span class="function">log</span>(e.detail));</pre>
+        </div>
+
+        <p style="margin:24px 0 8px;font-size:13px;color:#6b7280;">For full-page dialog-like preview, set display-mode attribute:</p>
+
+        <div class="code-block">
+          <pre><span class="comment"><!-- Full-page inline mode --></span>
+<span class="tag">&lt;document-preview</span> <span class="attr">id</span>=<span class="string">"preview"</span> <span class="attr">display-mode</span>=<span class="string">"inline"</span><span class="tag">&gt;&lt;/document-preview&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+  preview.items = items;
+  preview.open = <span class="keyword">true</span>; <span class="comment">// Opens full-page like a dialog box</span>
+<span class="tag">&lt;/script&gt;</span></pre>
+        </div>
+      </section>
+
+      <!-- CDN Usage -->
+      <section>
+        <h2 class="section-title">CDN (no build step)</h2>
+        <p class="section-desc">Use directly in any HTML page via a CDN.</p>
+
+        <div class="code-block">
+          <pre><span class="comment">&lt;!-- After publishing to npm --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">type</span>=<span class="string">"module"</span><span class="tag">&gt;</span>
+  <span class="keyword">import</span> <span class="string">'https://unpkg.com/document-preview@latest/dist/document-preview.js'</span>;
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Or from a local build --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">type</span>=<span class="string">"module"</span><span class="tag">&gt;</span>
+  <span class="keyword">import</span> <span class="string">'./dist/document-preview.js'</span>;
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="tag">&lt;document-preview</span> <span class="attr">id</span>=<span class="string">"preview"</span><span class="tag">&gt;&lt;/document-preview&gt;</span></pre>
+        </div>
+      </section>
+
+      <!-- API -->
+      <section>
+        <h2 class="section-title">API Reference</h2>
+        <p class="section-desc">Properties, attributes, and events supported by the component.</p>
+
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>items</code></td>
+              <td><span class="type-badge type-prop">property</span></td>
+              <td>Array of <code>{url, type, name}</code> objects to preview</td>
+            </tr>
+            <tr>
+              <td><code>open</code></td>
+              <td><span class="type-badge type-attr">attribute</span></td>
+              <td>Boolean — shows/hides the lightbox</td>
+            </tr>
+            <tr>
+              <td><code>initial-index</code></td>
+              <td><span class="type-badge type-attr">attribute</span></td>
+              <td>Number — index of the item to show first</td>
+            </tr>
+            <tr>
+              <td><code>loop</code></td>
+              <td><span class="type-badge type-prop">property</span></td>
+              <td>Boolean — wrap navigation from last to first (default <code>false</code>)</td>
+            </tr>
+            <tr>
+              <td><code>close-on-overlay</code></td>
+              <td><span class="type-badge type-attr">attribute</span></td>
+              <td>Boolean — close when clicking the overlay background (default <code>true</code>)</td>
+            </tr>
+            <tr>
+              <td><code>close-on-escape</code></td>
+              <td><span class="type-badge type-attr">attribute</span></td>
+              <td>Boolean — close when pressing Escape (default <code>true</code>)</td>
+            </tr>
+            <tr>
+              <td><code>display-mode</code></td>
+              <td><span class="type-badge type-attr">attribute</span></td>
+              <td>String — <code>"modal"</code> for overlay with focus trap, <code>"inline"</code> for full-page dialog-like display (default <code>"modal"</code>)</td>
+            </tr>
+            <tr>
+              <td><code>downloadable</code></td>
+              <td><span class="type-badge type-prop">property</span></td>
+              <td>Boolean — show download button (default <code>true</code>)</td>
+            </tr>
+            <tr>
+              <td><code>open()</code> / <code>openAt(index)</code></td>
+              <td><span class="type-badge type-prop">method</span></td>
+              <td>Open the lightbox, optionally at a specific index</td>
+            </tr>
+            <tr>
+              <td><code>next()</code> / <code>prev()</code></td>
+              <td><span class="type-badge type-prop">method</span></td>
+              <td>Programmatically navigate between items</td>
+            </tr>
+            <tr>
+              <td><code>goTo(index)</code></td>
+              <td><span class="type-badge type-prop">method</span></td>
+              <td>Jump to a specific item by index</td>
+            </tr>
+            <tr>
+              <td><code>close</code></td>
+              <td><span class="type-badge type-event">event</span></td>
+              <td>Dispatched when the lightbox is closed</td>
+            </tr>
+            <tr>
+              <td><code>open</code></td>
+              <td><span class="type-badge type-event">event</span></td>
+              <td>Dispatched when the lightbox opens</td>
+            </tr>
+            <tr>
+              <td><code>item-change</code></td>
+              <td><span class="type-badge type-event">event</span></td>
+              <td>Dispatched on navigation. <code>e.detail</code> contains <code>{previousIndex, currentIndex, item}</code></td>
+            </tr>
+            <tr>
+              <td><code>download</code></td>
+              <td><span class="type-badge type-event">event</span></td>
+              <td>Dispatched when download is clicked. <code>e.detail.item</code> contains the item</td>
+            </tr>
+            <tr>
+              <td><code>error</code></td>
+              <td><span class="type-badge type-event">event</span></td>
+              <td>Dispatched when an image/PDF fails to load. <code>e.detail</code> contains <code>{item, error}</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+
+    <div class="footer">
+      MIT License &middot; Built with Lit
+    </div>
+
+    <document-preview id="preview"></document-preview>
+
+    <script type="module">
+      import './src/index.ts';
+
+      const items = [
+        {
+          url: 'https://picsum.photos/seed/doc1/800/600',
+          type: 'image',
+          name: 'Mountain Landscape',
+        },
+        {
+          url: 'https://picsum.photos/seed/doc2/800/600',
+          type: 'image',
+          name: 'City View',
+        },
+        {
+          url: 'https://picsum.photos/seed/doc3/800/600',
+          type: 'image',
+          name: 'Ocean Sunset',
+        },
+        {
+          url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+          type: 'pdf',
+          name: 'Sample PDF Document',
+        },
+        {
+          url: '#',
+          type: 'other',
+          name: 'sample-file.zip',
+        },
+      ];
+
+      const preview = document.getElementById('preview');
+      const inlinePreview = document.getElementById('inline-preview');
+      let eventLogging = false;
+
+      preview.addEventListener('close', () => {
+        console.log('Preview closed');
+        if (eventLogging) logEvent('close — preview closed');
+      });
+      preview.addEventListener('download', (e) => {
+        console.log('Download:', e.detail);
+        if (eventLogging) logEvent(`download — ${e.detail.item.name}`);
+      });
+
+      const grid = document.getElementById('demo-grid');
+      items.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Preview ${item.name}`);
+        card.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <div class="name">${item.name}</div>
+          <div class="type">${item.type}</div>
+        `;
+        card.addEventListener('click', () => openPreview(index));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openPreview(index);
+          }
+        });
+        grid.appendChild(card);
+      });
+
+      function openPreview(index) {
+        preview.items = items;
+        preview.initialIndex = index;
+        preview.open = true;
+      }
+
+      document.getElementById('btn-open-first').addEventListener('click', () => openPreview(0));
+
+      document.getElementById('btn-toggle-event').addEventListener('click', (e) => {
+        eventLogging = !eventLogging;
+        e.currentTarget.textContent = eventLogging ? 'Disable Event Logging' : 'Enable Event Logging';
+        logEvent(eventLogging ? 'Event logging enabled' : 'Event logging disabled');
+      });
+
+      // Inline preview controls
+      document.getElementById('btn-open-inline').addEventListener('click', () => {
+        inlinePreview.items = items;
+        inlinePreview.initialIndex = 0;
+        inlinePreview.open = true;
+      });
+
+      document.getElementById('btn-close-inline').addEventListener('click', () => {
+        inlinePreview.open = false;
+      });
+
+      document.getElementById('btn-next-inline').addEventListener('click', () => {
+        inlinePreview.next();
+      });
+
+      document.getElementById('btn-prev-inline').addEventListener('click', () => {
+        inlinePreview.prev();
+      });
+
+      preview.addEventListener('open', () => {
+        if (eventLogging) logEvent('open — lightbox opened');
+      });
+      preview.addEventListener('item-change', (e) => {
+        if (eventLogging) logEvent(`item-change — ${e.detail.currentIndex + 1} / ${items.length}`);
+      });
+      preview.addEventListener('error', (e) => {
+        if (eventLogging) logEvent(`error — ${e.detail.item.name}: ${e.detail.error}`);
+      });
+
+      function logEvent(msg) {
+        const log = document.getElementById('event-log');
+        const entry = document.createElement('div');
+        entry.className = 'entry';
+        const time = new Date().toLocaleTimeString();
+        entry.innerHTML = `<span class="time">[${time}]</span> ${msg}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+      }
+    </script>
+  </body>
+</html>
