@@ -22,6 +22,10 @@ export interface BosLightboxProps {
   displayMode?: "modal" | "inline";
   /** Custom render function for item content. Receives the current item and returns React nodes. */
   renderItem?: (item: PreviewItem) => React.ReactNode;
+  /** Enable auto-playing slideshow mode. */
+  slideshow?: boolean;
+  /** Interval in ms between slideshow advances. Defaults to 3000. */
+  slideshowInterval?: number;
   onOpen?: () => void;
   onClose?: () => void;
   onItemChange?: (detail: ItemChangeEventDetail) => void;
@@ -39,6 +43,10 @@ export interface BosLightboxRef {
   close: () => void;
   getCurrentIndex: () => number;
   getCurrentItem: () => PreviewItem | undefined;
+  /** Toggle slideshow play/pause. */
+  toggleSlideshow: () => void;
+  /** Whether the slideshow is currently active. */
+  isSlideshowActive: () => boolean;
 }
 
 /* ─── Icons (inline SVGs) ─── */
@@ -82,6 +90,16 @@ const Icons = {
   video: (
     <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+    </svg>
+  ),
+  play: (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <polygon points="6 4 20 12 6 20 6 4" />
+    </svg>
+  ),
+  pause: (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+      <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
     </svg>
   ),
 };
@@ -420,6 +438,8 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     downloadable = true,
     displayMode = "modal",
     renderItem,
+    slideshow = false,
+    slideshowInterval = 3000,
     onOpen,
     onClose,
     onItemChange,
@@ -432,6 +452,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [pdfError, setPdfError] = useState(false);
   const [zoom, setZoom] = useState(1);
+  const [playing, setPlaying] = useState(false);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
@@ -439,6 +460,8 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
   const prevIndexRef = useRef(currentIndex);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+  const goNextRef = useRef(goNext);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
   const currentItem = useMemo(() => items[currentIndex], [items, currentIndex]);
 
@@ -456,6 +479,9 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
 
   // ── SSR guard ──
   const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
+
+  // Keep refs in sync
+  goNextRef.current = goNext;
 
   // Sync currentIndex when items or open changes
   useEffect(() => {
@@ -542,6 +568,40 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     };
   }, [open, displayMode, closeOnEscape, onClose]);
 
+  // Slideshow lifecycle
+  useEffect(() => {
+    if (!open || !slideshow) {
+      setPlaying(false);
+      return;
+    }
+    setPlaying(true);
+    return () => {
+      setPlaying(false);
+      clearInterval(intervalRef.current);
+      intervalRef.current = undefined;
+    };
+  }, [open, slideshow]);
+
+  // Slideshow interval
+  useEffect(() => {
+    if (!playing) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = undefined;
+      return;
+    }
+    if (!canGoNext) {
+      setPlaying(false);
+      return;
+    }
+    intervalRef.current = setInterval(() => {
+      goNextRef.current(true);
+    }, slideshowInterval);
+    return () => {
+      clearInterval(intervalRef.current);
+      intervalRef.current = undefined;
+    };
+  }, [playing, canGoNext, slideshowInterval]);
+
   // Item change events
   useEffect(() => {
     if (!open || !currentItem) return;
@@ -552,32 +612,36 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     });
   }, [currentIndex, open, onItemChange, currentItem]);
 
-  function goNext() {
-    if (!canGoNext) return;
+  function goNext(isAuto = false) {
+    if (!canGoNext) {
+      if (playing) setPlaying(false);
+      return;
+    }
     setCurrentIdx((prev) => {
       if (prev < items.length - 1) return prev + 1;
       if (loop) return 0;
       return prev;
-    });
+    }, isAuto);
     resetErrors();
   }
 
-  function goPrev() {
+  function goPrev(isAuto = false) {
     if (!canGoPrev) return;
     setCurrentIdx((prev) => {
       if (prev > 0) return prev - 1;
       if (loop) return items.length - 1;
       return prev;
-    });
+    }, isAuto);
     resetErrors();
   }
 
-  function setCurrentIdx(fn: (prev: number) => number) {
+  function setCurrentIdx(fn: (prev: number) => number, isAuto = false) {
     const next = fn(currentIndex);
     if (next !== currentIndex) {
       prevIndexRef.current = currentIndex;
       setCurrentIndex(next);
       setZoom(1);
+      if (!isAuto) setPlaying(false);
     }
   }
 
@@ -642,6 +706,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
       setCurrentIndex(idx);
       setZoom(1);
       resetErrors();
+      setPlaying(false);
     },
     goTo: (index: number) => {
       const idx = Math.max(0, Math.min(index, items.length - 1));
@@ -649,6 +714,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
       setCurrentIndex(idx);
       setZoom(1);
       resetErrors();
+      setPlaying(false);
     },
     next: () => goNext(),
     prev: () => goPrev(),
@@ -657,7 +723,9 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     },
     getCurrentIndex: () => currentIndex,
     getCurrentItem: () => currentItem,
-  }), [currentIndex, currentItem, items.length, canGoNext, canGoPrev, loop, onClose]);
+    toggleSlideshow: () => setPlaying((p) => !p),
+    isSlideshowActive: () => playing,
+  }), [currentIndex, currentItem, items.length, canGoNext, canGoPrev, loop, onClose, playing]);
 
   if (!open || !currentItem) return null;
 
@@ -757,14 +825,27 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
       <div style={styles.headerLeft}>
         {displayMode === "inline" && (
           <>
-            <button type="button" style={{ ...styles.navBtn, opacity: canGoPrev ? 1 : 0.3, cursor: canGoPrev ? "pointer" : "default" }} disabled={!canGoPrev} onClick={goPrev} aria-label="Previous">{Icons.prev}</button>
-            <button type="button" style={{ ...styles.navBtn, opacity: canGoNext ? 1 : 0.3, cursor: canGoNext ? "pointer" : "default" }} disabled={!canGoNext} onClick={goNext} aria-label="Next">{Icons.next}</button>
+            <button type="button" style={{ ...styles.navBtn, opacity: canGoPrev ? 1 : 0.3, cursor: canGoPrev ? "pointer" : "default" }} disabled={!canGoPrev} onClick={() => goPrev()} aria-label="Previous">{Icons.prev}</button>
+            <button type="button" style={{ ...styles.navBtn, opacity: canGoNext ? 1 : 0.3, cursor: canGoNext ? "pointer" : "default" }} disabled={!canGoNext} onClick={() => goNext()} aria-label="Next">{Icons.next}</button>
           </>
         )}
         <span style={styles.fileName}>{currentItem.name}</span>
       </div>
       <div style={styles.headerRight}>
         {items.length > 1 && <span style={styles.counter}>{currentIndex + 1} / {items.length}</span>}
+        {slideshow && items.length > 1 && (
+          <button
+            type="button"
+            style={{
+              ...styles.iconBtn,
+              background: playing ? "rgba(76,175,80,0.25)" : "rgba(255,255,255,0.08)",
+            }}
+            onClick={() => setPlaying((p) => !p)}
+            aria-label={playing ? "Pause slideshow" : "Play slideshow"}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = playing ? "rgba(76,175,80,0.35)" : "rgba(255,255,255,0.18)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = playing ? "rgba(76,175,80,0.25)" : "rgba(255,255,255,0.08)"; }}
+          >{playing ? Icons.pause : Icons.play}</button>
+        )}
         {downloadable && (
           <button type="button" style={styles.iconBtn} onClick={handleDownload} aria-label="Download"
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
@@ -796,7 +877,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
             type="button"
             style={{ ...styles.navArrow, left: 14, opacity: canGoPrev ? 1 : 0.25, cursor: canGoPrev ? "pointer" : "default" }}
             disabled={!canGoPrev}
-            onClick={goPrev}
+            onClick={() => goPrev()}
             aria-label="Previous image"
             onMouseEnter={(e) => { if (canGoPrev) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)"; }}
@@ -805,7 +886,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
             type="button"
             style={{ ...styles.navArrow, right: 14, opacity: canGoNext ? 1 : 0.25, cursor: canGoNext ? "pointer" : "default" }}
             disabled={!canGoNext}
-            onClick={goNext}
+            onClick={() => goNext()}
             aria-label="Next image"
             onMouseEnter={(e) => { if (canGoNext) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.18)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)"; }}

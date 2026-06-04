@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Slideshow mode — auto-play with configurable `slideshowInterval` (default 3000ms)
+  - Play/pause toggle button in the header with visual state
+  - `toggleSlideshow()` and `isSlideshowActive()` on the ref API
+  - Auto-starts when lightbox opens with `slideshow={true}`
+  - Pauses on manual navigation, zoom, goTo, openAt
+  - Stops at last item when `loop={false}`
 - Video type support — `"video"` items render as `<video controls autoPlay>`
 - `renderItem` prop for custom item content rendering
 - Open/close fade-in animation and fade transition between items

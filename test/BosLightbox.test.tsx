@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { createRef } from "react";
 import { BosLightbox, type BosLightboxRef } from "../src/BosLightbox";
@@ -571,6 +571,202 @@ describe("BosLightbox", () => {
           error: "Image failed to load",
         }),
       );
+    });
+  });
+
+  describe("Slideshow", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("shows play/pause button when slideshow is enabled (auto-starts as pause)", () => {
+      render(
+        <BosLightbox items={IMAGE_ITEMS} open={true} slideshow={true} />,
+      );
+      // Slideshow auto-starts, so the button says "Pause slideshow"
+      expect(screen.getByLabelText("Pause slideshow")).toBeInTheDocument();
+    });
+
+    it("does not show play/pause button when slideshow is disabled", () => {
+      render(
+        <BosLightbox items={IMAGE_ITEMS} open={true} slideshow={false} />,
+      );
+      expect(screen.queryByLabelText("Play slideshow")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Pause slideshow")).not.toBeInTheDocument();
+    });
+
+    it("starts playing automatically when lightbox opens with slideshow enabled", () => {
+      const { rerender } = render(
+        <BosLightbox items={IMAGE_ITEMS} open={false} slideshow={true} />,
+      );
+
+      rerender(
+        <BosLightbox items={IMAGE_ITEMS} open={true} slideshow={true} />,
+      );
+
+      // Should show pause button (indicating playing)
+      expect(screen.getByLabelText("Pause slideshow")).toBeInTheDocument();
+    });
+
+    it("advances to next item after interval", () => {
+      const onItemChange = vi.fn();
+      render(
+        <BosLightbox
+          items={IMAGE_ITEMS}
+          open={true}
+          slideshow={true}
+          slideshowInterval={3000}
+          onItemChange={onItemChange}
+        />,
+      );
+
+      onItemChange.mockClear();
+
+      // Advance 3 seconds
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+
+      expect(onItemChange).toHaveBeenCalledWith(
+        expect.objectContaining({ previousIndex: 0, currentIndex: 1 }),
+      );
+    });
+
+    it("does not advance when paused by user click", () => {
+      const onItemChange = vi.fn();
+      render(
+        <BosLightbox
+          items={IMAGE_ITEMS}
+          open={true}
+          slideshow={true}
+          onItemChange={onItemChange}
+        />,
+      );
+
+      onItemChange.mockClear();
+
+      // Click pause
+      fireEvent.click(screen.getByLabelText("Pause slideshow"));
+
+      // Advance time
+      act(() => {
+        vi.advanceTimersByTime(6000);
+      });
+
+      // Should NOT have navigated
+      expect(onItemChange).not.toHaveBeenCalled();
+    });
+
+    it("pauses when user manually navigates", () => {
+      const onItemChange = vi.fn();
+      render(
+        <BosLightbox
+          items={IMAGE_ITEMS}
+          open={true}
+          slideshow={true}
+          onItemChange={onItemChange}
+        />,
+      );
+
+      onItemChange.mockClear();
+
+      // Manually navigate
+      fireEvent.click(screen.getByLabelText("Next image"));
+
+      // Should show play button (paused)
+      expect(screen.getByLabelText("Play slideshow")).toBeInTheDocument();
+    });
+
+    it("pauses on manual prev navigation", () => {
+      const onItemChange = vi.fn();
+      render(
+        <BosLightbox
+          items={IMAGE_ITEMS}
+          open={true}
+          initialIndex={1}
+          slideshow={true}
+          onItemChange={onItemChange}
+        />,
+      );
+
+      // Manually navigate prev
+      fireEvent.click(screen.getByLabelText("Previous image"));
+
+      // Should show play button (paused)
+      expect(screen.getByLabelText("Play slideshow")).toBeInTheDocument();
+    });
+
+    it("pauses on goTo via ref", () => {
+      const ref = createRef<BosLightboxRef>();
+      render(
+        <BosLightbox
+          ref={ref}
+          items={IMAGE_ITEMS}
+          open={true}
+          slideshow={true}
+        />,
+      );
+
+      act(() => {
+        ref.current?.goTo(1);
+      });
+
+      expect(screen.getByLabelText("Play slideshow")).toBeInTheDocument();
+    });
+
+    it("toggles play/pause via ref.toggleSlideshow", () => {
+      const ref = createRef<BosLightboxRef>();
+      render(
+        <BosLightbox
+          ref={ref}
+          items={IMAGE_ITEMS}
+          open={true}
+          slideshow={true}
+        />,
+      );
+
+      expect(ref.current?.isSlideshowActive()).toBe(true);
+
+      act(() => {
+        ref.current?.toggleSlideshow();
+      });
+      expect(ref.current?.isSlideshowActive()).toBe(false);
+
+      act(() => {
+        ref.current?.toggleSlideshow();
+      });
+      expect(ref.current?.isSlideshowActive()).toBe(true);
+    });
+
+    it("stops at last item when loop is false", () => {
+      const onItemChange = vi.fn();
+      render(
+        <BosLightbox
+          items={IMAGE_ITEMS}
+          open={true}
+          initialIndex={1}
+          slideshow={true}
+          loop={false}
+          slideshowInterval={3000}
+          onItemChange={onItemChange}
+        />,
+      );
+
+      onItemChange.mockClear();
+
+      // Try to advance past last item
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+
+      // Should not have navigated (already at last item, no loop)
+      expect(onItemChange).not.toHaveBeenCalled();
+      // Slideshow should be paused
+      expect(screen.getByLabelText("Play slideshow")).toBeInTheDocument();
     });
   });
 

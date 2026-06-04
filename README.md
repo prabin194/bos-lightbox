@@ -14,6 +14,7 @@ A React lightbox component for previewing images, PDFs, videos, and other docume
 - 🎨 **Customizable** — `className`, `style`, and `renderItem` props for full control
 - 🎯 **TypeScript** — Full type definitions included
 - 🎞️ **Animations** — Smooth fade-in on open and fade transitions between items
+- 🔁 **Slideshow** — Auto-play with configurable interval and play/pause control
 - 📦 **Lightweight** — No external dependencies beyond React. Tree-shakeable ESM and UMD builds
 - 🖥️ **SSR Compatible** — Safe for server-side rendering environments
 
@@ -114,6 +115,8 @@ Renders as a fixed-position overlay without the `<dialog>` element — useful wh
 | `downloadable` | `boolean` | `true` | Show the download button in the header |
 | `displayMode` | `"modal" \| "inline"` | `"modal"` | Display mode |
 | `renderItem` | `(item) => ReactNode` | — | Custom render function for item content |
+| `slideshow` | `boolean` | `false` | Enable auto-playing slideshow mode |
+| `slideshowInterval` | `number` | `3000` | Interval in ms between slideshow advances |
 | `className` | `string` | — | CSS class for the root element |
 | `style` | `React.CSSProperties` | — | Inline styles for the root element |
 | `onOpen` | `() => void` | — | Callback when the lightbox opens |
@@ -164,6 +167,8 @@ When `renderItem` is provided, it takes precedence over the built-in type-based 
 | `close()` | Close the lightbox programmatically |
 | `getCurrentIndex()` | Return the current item index |
 | `getCurrentItem()` | Return the current item object |
+| `toggleSlideshow()` | Toggle slideshow play/pause |
+| `isSlideshowActive()` | Return whether slideshow is currently active |
 
 ## Keyboard Shortcuts
 
