@@ -453,9 +453,9 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <span class="keyword">import</span> { <span class="function">BosLightbox</span> } <span class="keyword">from</span> <span class="string">"bos-lightbox"</span>
 
 <span class="keyword">const</span> images = [
-  { url: <span class="string">"https://picsum.photos/id/10/800/600"</span>, type: <span class="string">"image"</span>, name: <span class="string">"Forest path"</span> },
-  { url: <span class="string">"https://picsum.photos/id/20/800/600"</span>, type: <span class="string">"image"</span>, name: <span class="string">"Mountain lake"</span> },
-  { url: <span class="string">"https://picsum.photos/id/30/800/600"</span>, type: <span class="string">"image"</span>, name: <span class="string">"City skyline"</span> },
+  { url: <span class="string">"demo-images/mountains.svg"</span>, type: <span class="string">"image"</span>, name: <span class="string">"Mountain landscape"</span> },
+  { url: <span class="string">"demo-images/abstract.svg"</span>,  type: <span class="string">"image"</span>, name: <span class="string">"Abstract art"</span> },
+  { url: <span class="string">"demo-images/city.svg"</span>,      type: <span class="string">"image"</span>, name: <span class="string">"City skyline"</span> },
 ]
 
 <span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="function">Gallery</span>() {
@@ -609,11 +609,11 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
     var useState = R.useState;
 
     var items = [
-      { url: 'https://picsum.photos/seed/mountain/800/600', type: 'image', name: 'Mountain landscape' },
-      { url: 'https://picsum.photos/seed/city/800/600', type: 'image', name: 'City skyline' },
-      { url: 'https://picsum.photos/seed/ocean/800/600', type: 'image', name: 'Ocean sunset' },
-      { url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', type: 'pdf', name: 'Sample report.pdf' },
-      { url: '#', type: 'other', name: 'archive.zip' },
+      { url: 'demo-images/mountains.svg', type: 'image', name: 'Mountain landscape' },
+      { url: 'demo-images/abstract.svg', type: 'image', name: 'Abstract composition' },
+      { url: 'demo-images/city.svg', type: 'image', name: 'City skyline' },
+      { url: 'demo-images/sunset.svg', type: 'image', name: 'Ocean sunset' },
+      { url: 'demo-images/geometric.svg', type: 'image', name: 'Geometric pattern' },
     ];
 
     var fallbackIcons = { pdf: '📄', video: '🎬', other: '📁' };

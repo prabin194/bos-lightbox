@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="25%" stop-color="#2d1b69"/>
+      <stop offset="50%" stop-color="#e85d3a"/>
+      <stop offset="70%" stop-color="#f5a623"/>
+      <stop offset="85%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff7e0"/>
+      <stop offset="40%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff8c00"/>
+      <stop offset="40%" stop-color="#e85d3a"/>
+      <stop offset="100%" stop-color="#2d1b69"/>
+    </linearGradient>
+    <linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d1b69"/>
+      <stop offset="100%" stop-color="#1a0a2e"/>
+    </linearGradient>
+    <filter id="glowSun">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="blurWide"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="340" fill="url(#skyGrad)"/>
+
+  <!-- Sun -->
+  <circle cx="400" cy="310" r="55" fill="url(#sunGrad)" filter="url(#glowSun)"/>
+
+  <!-- Sun glow spread -->
+  <ellipse cx="400" cy="310" rx="200" ry="100" fill="#ffd700" opacity="0.08" filter="url(#blurWide)"/>
+
+  <!-- Distant hills -->
+  <path d="M0,320 Q60,290 130,310 Q180,295 240,315 Q300,285 370,305 Q420,290 470,310 Q530,280 590,305 Q640,295 700,315 Q740,300 800,310 L800,340 L0,340 Z" fill="#3d2068" opacity="0.5"/>
+
+  <!-- Middle hills -->
+  <path d="M0,340 Q50,315 120,330 Q200,305 280,325 Q350,300 430,320 Q500,295 560,315 Q640,300 720,320 Q760,310 800,325 L800,340 L0,340 Z" fill="#2d1b69" opacity="0.7"/>
+
+  <!-- Water -->
+  <rect x="0" y="340" width="800" height="260" fill="url(#water)"/>
+
+  <!-- Sun reflection on water -->
+  <g opacity="0.5">
+    <ellipse cx="400" cy="360" rx="60" ry="4" fill="#ffd700"/>
+    <ellipse cx="400" cy="370" rx="40" ry="3" fill="#ffd700" opacity="0.7"/>
+    <ellipse cx="400" cy="380" rx="30" ry="2.5" fill="#ffd700" opacity="0.5"/>
+    <ellipse cx="400" cy="390" rx="20" ry="2" fill="#ffd700" opacity="0.4"/>
+    <ellipse cx="400" cy="400" rx="15" ry="1.5" fill="#ffd700" opacity="0.3"/>
+    <ellipse cx="400" cy="410" rx="10" ry="1" fill="#ffd700" opacity="0.2"/>
+  </g>
+
+  <!-- Water ripples -->
+  <g stroke="#ffd700" stroke-width="0.5" fill="none" opacity="0.12">
+    <path d="M0,430 Q100,425 200,430 Q300,435 400,430 Q500,425 600,430 Q700,435 800,430"/>
+    <path d="M0,460 Q100,455 200,460 Q300,465 400,460 Q500,455 600,460 Q700,465 800,460"/>
+    <path d="M0,490 Q100,486 200,490 Q300,494 400,490 Q500,486 600,490 Q700,494 800,490"/>
+    <path d="M0,520 Q100,516 200,520 Q300,524 400,520 Q500,516 600,520 Q700,524 800,520"/>
+  </g>
+
+  <!-- Silhouette trees on shores -->
+  <g fill="#1a0a2e" opacity="0.6">
+    <!-- Left shore -->
+    <polygon points="40,340 44,305 48,340"/>
+    <polygon points="55,340 60,298 65,340"/>
+    <polygon points="72,340 77,310 82,340"/>
+    <polygon points="90,340 94,302 98,340"/>
+
+    <!-- Right shore -->
+    <polygon points="700,340 704,308 708,340"/>
+    <polygon points="718,340 723,295 728,340"/>
+    <polygon points="740,340 745,302 750,340"/>
+    <polygon points="762,340 766,310 770,340"/>
+  </g>
+
+  <!-- Foreground shore -->
+  <path d="M0,560 Q100,540 200,555 Q300,545 400,558 Q500,548 600,555 Q700,542 800,558 L800,600 L0,600 Z" fill="#1a0a2e" opacity="0.8"/>
+
+  <!-- Birds -->
+  <g stroke="#1a0a2e" stroke-width="1.5" fill="none" opacity="0.4">
+    <path d="M180,180 Q185,173 190,180"/>
+    <path d="M195,175 Q200,168 205,175"/>
+    <path d="M560,160 Q565,153 570,160"/>
+    <path d="M575,165 Q580,158 585,165"/>
+    <path d="M220,195 Q223,190 226,195"/>
+    <path d="M540,185 Q543,180 546,185"/>
+  </g>
+</svg>

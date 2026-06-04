@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f0c29"/>
+      <stop offset="50%" stop-color="#302b63"/>
+      <stop offset="100%" stop-color="#24243e"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff6b6b"/>
+      <stop offset="100%" stop-color="#ee5a24"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a29bfe"/>
+      <stop offset="100%" stop-color="#6c5ce7"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fd79a8"/>
+      <stop offset="100%" stop-color="#e84393"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fdcb6e"/>
+      <stop offset="100%" stop-color="#e17055"/>
+    </linearGradient>
+    <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00cec9"/>
+      <stop offset="100%" stop-color="#0984e3"/>
+    </linearGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Large background circles -->
+  <circle cx="200" cy="150" r="180" fill="url(#g1)" opacity="0.15" filter="url(#blur1)"/>
+  <circle cx="600" cy="450" r="200" fill="url(#g2)" opacity="0.15" filter="url(#blur1)"/>
+  <circle cx="650" cy="120" r="140" fill="url(#g5)" opacity="0.1" filter="url(#blur1)"/>
+
+  <!-- Geometric shapes -->
+  <!-- Central diamond -->
+  <polygon points="400,100 550,300 400,500 250,300" fill="url(#g2)" opacity="0.85"/>
+  <polygon points="400,150 500,300 400,450 300,300" fill="#302b63" opacity="0.6"/>
+
+  <!-- Circles -->
+  <circle cx="180" cy="420" r="70" fill="url(#g1)" opacity="0.7"/>
+  <circle cx="180" cy="420" r="40" fill="#0f0c29" opacity="0.3"/>
+  <circle cx="180" cy="420" r="20" fill="url(#g1)" opacity="0.5"/>
+
+  <circle cx="620" cy="180" r="55" fill="url(#g3)" opacity="0.75"/>
+  <circle cx="620" cy="180" r="30" fill="#24243e" opacity="0.4"/>
+  <circle cx="620" cy="180" r="12" fill="url(#g3)" opacity="0.6"/>
+
+  <!-- Triangles -->
+  <polygon points="100,100 160,200 40,200" fill="url(#g4)" opacity="0.6"/>
+  <polygon points="700,480 760,560 640,560" fill="url(#g5)" opacity="0.65"/>
+
+  <!-- Lines -->
+  <line x1="250" y1="300" x2="400" y2="100" stroke="#fdcb6e" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="100" x2="550" y2="300" stroke="#fdcb6e" stroke-width="1.5" opacity="0.4"/>
+  <line x1="550" y1="300" x2="400" y2="500" stroke="#fdcb6e" stroke-width="1.5" opacity="0.4"/>
+  <line x1="400" y1="500" x2="250" y2="300" stroke="#fdcb6e" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Small decorative dots -->
+  <circle cx="350" cy="200" r="3" fill="#fff" opacity="0.5"/>
+  <circle cx="450" cy="200" r="2" fill="#fff" opacity="0.4"/>
+  <circle cx="300" cy="350" r="2.5" fill="#fff" opacity="0.5"/>
+  <circle cx="500" cy="350" r="2" fill="#fff" opacity="0.4"/>
+  <circle cx="400" cy="300" r="1.5" fill="#fff" opacity="0.3"/>
+
+  <!-- Floating particles -->
+  <circle cx="80" cy="250" r="2" fill="#fff" opacity="0.3"/>
+  <circle cx="720" cy="350" r="1.5" fill="#fff" opacity="0.25"/>
+  <circle cx="300" cy="80" r="1.5" fill="#fff" opacity="0.2"/>
+  <circle cx="550" cy="520" r="2" fill="#fff" opacity="0.3"/>
+  <circle cx="120" cy="530" r="1" fill="#fff" opacity="0.2"/>
+  <circle cx="680" cy="80" r="1.5" fill="#fff" opacity="0.25"/>
+</svg>

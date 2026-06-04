@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="40%" stop-color="#16213e"/>
+      <stop offset="100%" stop-color="#e2725b"/>
+    </linearGradient>
+    <linearGradient id="mountain1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d4059"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="mountain2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b6978"/>
+      <stop offset="100%" stop-color="#204051"/>
+    </linearGradient>
+    <linearGradient id="mountain3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a7c8c"/>
+      <stop offset="100%" stop-color="#2d5a6b"/>
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#ff8c00"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="600" fill="url(#sky)"/>
+
+  <!-- Stars -->
+  <circle cx="120" cy="60" r="1.5" fill="#fff" opacity="0.8"/>
+  <circle cx="300" cy="40" r="1" fill="#fff" opacity="0.6"/>
+  <circle cx="500" cy="55" r="1.5" fill="#fff" opacity="0.7"/>
+  <circle cx="680" cy="35" r="1" fill="#fff" opacity="0.5"/>
+  <circle cx="200" cy="90" r="1" fill="#fff" opacity="0.4"/>
+  <circle cx="600" cy="80" r="1.2" fill="#fff" opacity="0.6"/>
+  <circle cx="400" cy="25" r="0.8" fill="#fff" opacity="0.5"/>
+
+  <!-- Sun -->
+  <circle cx="400" cy="480" r="50" fill="url(#sun)" filter="url(#glow)" opacity="0.9"/>
+
+  <!-- Far mountains -->
+  <polygon points="0,500 80,300 160,380 240,280 320,350 400,260 480,340 560,290 640,370 720,310 800,400 800,600 0,600" fill="url(#mountain1)" opacity="0.6"/>
+
+  <!-- Middle mountains -->
+  <polygon points="0,550 60,380 140,420 220,340 300,400 380,320 460,380 540,330 620,410 700,360 800,430 800,600 0,600" fill="url(#mountain2)" opacity="0.7"/>
+
+  <!-- Snow caps -->
+  <polygon points="240,280 220,310 260,310" fill="#fff" opacity="0.3"/>
+  <polygon points="400,260 375,295 425,295" fill="#fff" opacity="0.4"/>
+  <polygon points="560,290 535,320 585,320" fill="#fff" opacity="0.3"/>
+
+  <!-- Foreground mountains -->
+  <polygon points="0,600 40,430 100,470 180,400 260,450 340,390 420,440 500,400 580,460 660,420 740,470 800,440 800,600 0,600" fill="url(#mountain3)"/>
+
+  <!-- Tree silhouettes -->
+  <g fill="#1a1a2e" opacity="0.6">
+    <polygon points="50,520 55,480 60,520"/>
+    <polygon points="70,530 76,485 82,530"/>
+    <polygon points="150,510 156,470 162,510"/>
+    <polygon points="680,515 686,475 692,515"/>
+    <polygon points="710,525 716,490 722,525"/>
+    <polygon points="740,520 745,480 750,520"/>
+  </g>
+
+  <!-- Ground -->
+  <rect x="0" y="560" width="800" height="40" fill="#1a1a2e" opacity="0.8"/>
+
+  <!-- Reflection on water (bottom edge) -->
+  <rect x="0" y="570" width="800" height="30" fill="#e2725b" opacity="0.15"/>
+</svg>
