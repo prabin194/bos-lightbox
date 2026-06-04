@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#ffffff;--surface:#f8f9fa;--surface2:#f1f3f5;--border:#e2e4e8;--text:#0f1117;--text2:#525866;--text3:#868c98;--accent:#7c3aed;--accent2:#a78bfa;--radius:10px;--radius-sm:6px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:15.5px;line-height:1.65;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+:root{--bg:#ffffff;--surface:#f8f9fa;--surface2:#f1f3f5;--border:#e2e4e8;--text:#0f1117;--text2:#525866;--text3:#868c98;--accent:#7c3aed;--accent2:#a78bfa;--radius:10px;--radius-sm:6px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.7;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
 .dark{--bg:#0b0d10;--surface:#121418;--surface2:#1a1d24;--border:#262a32;--text:#edf0f5;--text2:#9498a3;--text3:#636873}
 html{scroll-behavior:smooth}body{min-height:100vh;display:flex;flex-direction:column}
 header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.8);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--border)}
@@ -28,33 +28,33 @@ nav a.active{color:var(--accent);background:rgba(124,58,237,0.08)}
 .nav-btn:hover{color:var(--text);background:var(--surface2)}
 main{flex:1}.wrapper{max-width:900px;margin:0 auto;padding:0 28px;width:100%}
 
-.page-header{padding:48px 0 24px}
-.page-header h1{font-size:1.8rem;font-weight:700;letter-spacing:-0.02em}
-.page-header p{color:var(--text2);margin-top:4px;font-size:14.5px}
+.page-header{padding:56px 0 28px}
+.page-header h1{font-size:2rem;font-weight:700;letter-spacing:-0.02em}
+.page-header p{color:var(--text2);margin-top:6px;font-size:15px}
 
 .changelog{list-style:none;padding:0;position:relative}
 .changelog::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:2px;background:var(--border)}
-.changelog-entry{position:relative;padding:0 0 2rem 64px}
+.changelog-entry{position:relative;padding:0 0 2.5rem 64px}
 .changelog-entry:last-child{padding-bottom:0}
-.changelog-entry .dot{position:absolute;left:16px;top:7px;width:18px;height:18px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);z-index:1}
-.changelog-entry .version-header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
-.changelog-entry .version{font-size:1.2rem;font-weight:700;letter-spacing:-0.02em;color:var(--text)}
-.changelog-entry .tag{display:inline-flex;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:0.04em}
+.changelog-entry .dot{position:absolute;left:16px;top:7px;width:20px;height:20px;border-radius:50%;background:var(--surface);border:2.5px solid var(--accent);z-index:1}
+.changelog-entry .version-header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.changelog-entry .version{font-size:1.25rem;font-weight:700;letter-spacing:-0.02em;color:var(--text)}
+.changelog-entry .tag{display:inline-flex;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.04em}
 .changelog-entry .tag.latest{background:#059669;color:#fff}
 .changelog-entry .tag.feature{background:rgba(124,58,237,0.08);color:var(--accent)}
-.changelog-entry .title{font-size:14px;font-weight:600;color:var(--text2);margin-top:2px;margin-bottom:8px}
+.changelog-entry .title{font-size:14px;font-weight:600;color:var(--text2);margin-top:4px;margin-bottom:10px}
 .changelog-entry .changes{list-style:none;padding:0}
-.changelog-entry .changes li{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:14px;color:var(--text2);line-height:1.5}
+.changelog-entry .changes li{display:flex;align-items:flex-start;gap:10px;padding:5px 0;font-size:14px;color:var(--text2);line-height:1.55}
 .changelog-entry .changes li .emoji{flex-shrink:0;width:20px;text-align:center;font-size:14px;margin-top:2px}
 .changelog-entry .changes li .desc{flex:1}
 
-footer{text-align:center;padding:28px 24px;border-top:1px solid var(--border);font-size:13px;color:var(--text3);margin-top:auto}
+footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border);font-size:13px;color:var(--text3);margin-top:auto}
 footer a{color:var(--accent);text-decoration:none}
 
 @media(max-width:640px){
   nav{display:none}
   .wrapper{padding:0 16px}
-  .page-header{padding:32px 0 16px}
+  .page-header{padding:36px 0 20px}
 }
 </style>
 </head>
