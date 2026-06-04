@@ -331,15 +331,19 @@ function ImageViewer({
 }) {
   const [loaded, setLoaded] = useState(false);
   const imageWrapRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
   const panOffset = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    setLoaded(false);
     panOffset.current = { x: 0, y: 0 };
     if (imageWrapRef.current) {
       imageWrapRef.current.style.transform = `scale(1)`;
+    }
+    // If image is already cached, mark as loaded
+    if (imgRef.current?.complete) {
+      setLoaded(true);
     }
   }, [url]);
 
@@ -416,6 +420,7 @@ function ImageViewer({
         onMouseDown={handleMouseDown}
       >
         <img
+          ref={imgRef}
           src={url}
           alt={name}
           loading="lazy"
