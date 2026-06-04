@@ -153,6 +153,35 @@ footer a{color:var(--accent);text-decoration:none}
   )
 }</pre>
 
+<h2 id="live-demo">Live demo</h2>
+<p>Click any card below to open the lightbox and try it live. Navigate with arrow keys, zoom images, and close with <kbd>Esc</kbd>.</p>
+
+<div id="demo-root"></div>
+
+<div class="demo-error" id="demo-error">
+  <p>⚠️ Demo could not load. Make sure JavaScript is enabled.</p>
+</div>
+
+<noscript><div class="demo-error"><p>⚠️ JavaScript is required to view the live demo.</p></div></noscript>
+
+<style>
+#demo-root{min-height:200px;margin:16px 0 24px}
+.demo-error{display:none;padding:14px 18px;border-radius:var(--radius);background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.15);color:#dc2626;font-size:13.5px;margin:16px 0}
+.demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.demo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color 0.15s,transform 0.15s;position:relative}
+.demo-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.demo-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface2)}
+.demo-card-fallback{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--surface2);color:var(--text3)}
+.demo-card-label{padding:8px 12px;font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.demo-type-badge{position:absolute;top:8px;right:8px;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;background:rgba(0,0,0,0.55);color:#fff;backdrop-filter:blur(4px)}
+.demo-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px 24px;color:var(--text3);font-size:14px}
+.demo-loading .spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:demoSpin 0.6s linear infinite}
+@keyframes demoSpin{to{transform:rotate(360deg)}}
+@media(max-width:480px){
+  .demo-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+
 <h2 id="types">Type definitions</h2>
 
 <h3>PreviewItem</h3>
@@ -464,6 +493,101 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <script>
 // Theme toggle
 (function(){var b=document.getElementById('theme-btn'),d=document.documentElement;if(b){var t=localStorage.getItem('theme');if(t==='dark'){d.classList.add('dark');b.textContent='☀️'}b.addEventListener('click',function(){d.classList.toggle('dark');var isDark=d.classList.contains('dark');localStorage.setItem('theme',isDark?'dark':'light');b.textContent=isDark?'☀️':'🌙'})}})();
+</script>
+
+<script>
+// Live demo — load dependencies and bootstrap
+(function(){
+  var root = document.getElementById('demo-root');
+  var errorEl = document.getElementById('demo-error');
+  if (!root) return;
+
+  // Show loading state
+  root.innerHTML = '<div class="demo-loading"><div class="spinner"></div><span>Loading demo...</span></div>';
+
+  function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src; s.onload = cb; s.onerror = cb;
+    document.body.appendChild(s);
+  }
+
+  // Load React, ReactDOM, then bootstrap demo
+  loadScript('https://unpkg.com/react@18/umd/react.production.min.js', function() {
+    loadScript('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js', function() {
+      loadScript('bos-lightbox.umd.js', function() {
+        try {
+          bootstrapDemo();
+        } catch(e) {
+          root.innerHTML = '';
+          errorEl.style.display = 'block';
+          errorEl.innerHTML = '<p>⚠️ Demo error: ' + e.message + '</p>';
+        }
+      });
+    });
+  });
+
+  function bootstrapDemo() {
+    var R = window.React, RD = window.ReactDOM, LB = window.BosLightbox;
+    if (!R || !RD || !LB) {
+      root.innerHTML = '';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    var h = R.createElement;
+    var useState = R.useState;
+
+    var items = [
+      { url: 'https://picsum.photos/seed/mountain/800/600', type: 'image', name: 'Mountain landscape' },
+      { url: 'https://picsum.photos/seed/city/800/600', type: 'image', name: 'City skyline' },
+      { url: 'https://picsum.photos/seed/ocean/800/600', type: 'image', name: 'Ocean sunset' },
+      { url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', type: 'pdf', name: 'Sample report.pdf' },
+      { url: '#', type: 'other', name: 'archive.zip' },
+    ];
+
+    var fallbackIcons = { pdf: '📄', video: '🎬', other: '📁' };
+
+    function DemoApp() {
+      var _open = useState(false), open = _open[0], setOpen = _open[1];
+      var _index = useState(0), index = _index[0], setIndex = _index[1];
+
+      function openItem(i) {
+        setIndex(i);
+        setOpen(true);
+      }
+
+      return h(R.Fragment, null,
+        h('div', { className: 'demo-grid' },
+          items.map(function(item, i) {
+            var isImage = item.type === 'image';
+            return h('div', {
+              key: i,
+              className: 'demo-card',
+              onClick: function() { openItem(i); },
+              title: 'Open ' + item.name
+            },
+              isImage
+                ? h('img', { className: 'demo-card-img', src: item.url, alt: item.name, loading: 'lazy' })
+                : h('div', { className: 'demo-card-fallback' }, fallbackIcons[item.type] || '📁'),
+              h('div', { className: 'demo-type-badge' }, item.type),
+              h('div', { className: 'demo-card-label' }, item.name)
+            );
+          })
+        ),
+        h(LB.BosLightbox || LB, {
+          items: items,
+          open: open,
+          initialIndex: index,
+          loop: true,
+          thumbnails: true,
+          onClose: function() { setOpen(false); }
+        })
+      );
+    }
+
+    RD.createRoot(root).render(h(DemoApp));
+  }
+})();
 </script>
 </body>
 </html>
