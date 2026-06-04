@@ -5,6 +5,7 @@ A React lightbox component for previewing images, PDFs, videos, and other docume
 ## Features
 
 - 🖼️ **Image Preview** — Zoom, pan (drag when zoomed), and download images
+- 🖼️ **Thumbnail Strip** — Bottom thumbnail row for visual navigation between items
 - 📄 **PDF Preview** — Native PDF viewer integration via iframe
 - 🎬 **Video Support** — Native `<video>` playback with controls and autoplay
 - 📱 **Touch Gestures** — Swipe navigation on mobile devices
@@ -117,6 +118,7 @@ Renders as a fixed-position overlay without the `<dialog>` element — useful wh
 | `renderItem` | `(item) => ReactNode` | — | Custom render function for item content |
 | `slideshow` | `boolean` | `false` | Enable auto-playing slideshow mode |
 | `slideshowInterval` | `number` | `3000` | Interval in ms between slideshow advances |
+| `thumbnails` | `boolean` | `false` | Show a bottom thumbnail strip for visual navigation |
 | `className` | `string` | — | CSS class for the root element |
 | `style` | `React.CSSProperties` | — | Inline styles for the root element |
 | `onOpen` | `() => void` | — | Callback when the lightbox opens |

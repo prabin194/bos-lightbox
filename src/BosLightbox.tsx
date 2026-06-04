@@ -26,6 +26,8 @@ export interface BosLightboxProps {
   slideshow?: boolean;
   /** Interval in ms between slideshow advances. Defaults to 3000. */
   slideshowInterval?: number;
+  /** Show a bottom thumbnail strip for visual navigation. */
+  thumbnails?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
   onItemChange?: (detail: ItemChangeEventDetail) => void;
@@ -292,6 +294,16 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 6,
     padding: "8px 0",
   },
+  thumbnailStrip: {
+    display: "flex",
+    gap: 8,
+    padding: "8px 16px",
+    overflowX: "auto",
+    overflowY: "hidden",
+    flexShrink: 0,
+    background: "rgba(0,0,0,0.3)",
+    alignItems: "center",
+  } as React.CSSProperties,
 };
 
 /* ─── CSS keyframes (injected once) ─── */
@@ -440,6 +452,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     renderItem,
     slideshow = false,
     slideshowInterval = 3000,
+    thumbnails = false,
     onOpen,
     onClose,
     onItemChange,
@@ -462,6 +475,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
   const touchStartY = useRef(0);
   const goNextRef = useRef(goNext);
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const thumbStripRef = useRef<HTMLDivElement>(null);
 
   const currentItem = useMemo(() => items[currentIndex], [items, currentIndex]);
 
@@ -727,6 +741,15 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     isSlideshowActive: () => playing,
   }), [currentIndex, currentItem, items.length, canGoNext, canGoPrev, loop, onClose, playing]);
 
+  // Auto-scroll thumbnail strip to keep active item visible
+  useEffect(() => {
+    if (!thumbnails || !thumbStripRef.current) return;
+    const activeEl = thumbStripRef.current.children[currentIndex] as HTMLElement | undefined;
+    if (activeEl && typeof activeEl.scrollIntoView === "function") {
+      activeEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    }
+  }, [currentIndex, thumbnails]);
+
   if (!open || !currentItem) return null;
 
   const renderVideo = () => (
@@ -860,6 +883,52 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
     </div>
   );
 
+  const renderThumbnails = () => {
+    if (!thumbnails || items.length <= 1) return null;
+    return (
+      <div ref={thumbStripRef} style={styles.thumbnailStrip} role="tablist" aria-label="Gallery thumbnails">
+        {items.map((item, i) => (
+          <button
+            key={i}
+            type="button"
+            role="tab"
+            aria-selected={i === currentIndex}
+            aria-label={`${item.name} (${i + 1} of ${items.length})`}
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 6,
+              overflow: "hidden",
+              flexShrink: 0,
+              border: i === currentIndex ? "2px solid rgba(255,255,255,0.85)" : "2px solid transparent",
+              cursor: "pointer",
+              padding: 0,
+              background: "rgba(255,255,255,0.08)",
+              transition: "border-color 0.15s, opacity 0.15s",
+              opacity: i === currentIndex ? 1 : 0.5,
+            }}
+            onClick={() => { resetErrors(); setCurrentIdx(() => i); }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = i === currentIndex ? "1" : "0.5"; }}
+          >
+            {item.type === "image" ? (
+              <img
+                src={item.url}
+                alt={item.name}
+                style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
+                loading="lazy"
+              />
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", fontSize: 18 }}>
+                {item.type === "video" ? "🎬" : item.type === "pdf" ? "📄" : "📁"}
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
   const footer = displayMode === "modal" && items.length > 1 ? (
     <div style={styles.footer}>
       <span style={{ fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{currentIndex + 1} of {items.length}</span>
@@ -930,6 +999,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
           </div>
           {header}
           {content}
+          {renderThumbnails()}
         </div>
       </div>
     );
@@ -950,6 +1020,7 @@ const BosLightbox = forwardRef<BosLightboxRef, BosLightboxProps>((props, ref) =>
       <div style={styles.container}>
         {header}
         {content}
+        {renderThumbnails()}
         {footer}
       </div>
     </dialog>

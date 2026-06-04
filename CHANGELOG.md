@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Thumbnail strip — bottom thumbnail row for visual navigation (`thumbnails` prop)
+  - Shows image previews for image-type items, emoji icons for other types
+  - Auto-scrolls to keep active thumbnail visible
+  - Click to jump to any item
 - Slideshow mode — auto-play with configurable `slideshowInterval` (default 3000ms)
   - Play/pause toggle button in the header with visual state
   - `toggleSlideshow()` and `isSlideshowActive()` on the ref API

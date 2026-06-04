@@ -770,6 +770,90 @@ describe("BosLightbox", () => {
     });
   });
 
+  describe("Thumbnail strip", () => {
+    it("does not render thumbnails when disabled", () => {
+      render(
+        <BosLightbox items={IMAGE_ITEMS} open={true} thumbnails={false} />,
+      );
+      expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+    });
+
+    it("renders thumbnail strip when enabled with multiple items", () => {
+      render(
+        <BosLightbox items={IMAGE_ITEMS} open={true} thumbnails={true} />,
+      );
+      expect(screen.getByRole("tablist", { name: "Gallery thumbnails" })).toBeInTheDocument();
+    });
+
+    it("does not render thumbnails for single item", () => {
+      render(
+        <BosLightbox items={SINGLE_ITEM} open={true} thumbnails={true} />,
+      );
+      expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+    });
+
+    it("renders a thumbnail for each item", () => {
+      render(
+        <BosLightbox items={MIXED_ITEMS} open={true} thumbnails={true} />,
+      );
+      const thumbs = screen.getAllByRole("tab");
+      expect(thumbs).toHaveLength(3);
+    });
+
+    it("marks active thumbnail as selected", () => {
+      render(
+        <BosLightbox items={MIXED_ITEMS} open={true} initialIndex={1} thumbnails={true} />,
+      );
+      const thumbs = screen.getAllByRole("tab");
+      expect(thumbs[0]).toHaveAttribute("aria-selected", "false");
+      expect(thumbs[1]).toHaveAttribute("aria-selected", "true");
+      expect(thumbs[2]).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("navigates to item on thumbnail click", () => {
+      const onItemChange = vi.fn();
+      render(
+        <BosLightbox
+          items={MIXED_ITEMS}
+          open={true}
+          initialIndex={0}
+          thumbnails={true}
+          onItemChange={onItemChange}
+        />,
+      );
+
+      onItemChange.mockClear();
+
+      // Click the third thumbnail
+      const thumbs = screen.getAllByRole("tab");
+      fireEvent.click(thumbs[2]);
+
+      expect(onItemChange).toHaveBeenCalledWith(
+        expect.objectContaining({ previousIndex: 0, currentIndex: 2 }),
+      );
+    });
+
+    it("renders images for image-type thumbnails", () => {
+      render(
+        <BosLightbox items={IMAGE_ITEMS} open={true} thumbnails={true} />,
+      );
+      const imgs = document.querySelectorAll('[role="tab"] img');
+      expect(imgs).toHaveLength(2);
+      expect(imgs[0]).toHaveAttribute("src", IMAGE_ITEMS[0].url);
+    });
+
+    it("renders emoji placeholders for non-image thumbnails", () => {
+      render(
+        <BosLightbox items={MIXED_ITEMS} open={true} thumbnails={true} />,
+      );
+      // Item at index 1 is a PDF, should show 📄 emoji
+      const thumbs = screen.getAllByRole("tab");
+      expect(thumbs[1].textContent).toBe("📄");
+      // Item at index 2 is 'other', should show 📁
+      expect(thumbs[2].textContent).toBe("📁");
+    });
+  });
+
   describe("Edge cases", () => {
     it("renders without error with empty items array when closed", () => {
       const { container } = render(
