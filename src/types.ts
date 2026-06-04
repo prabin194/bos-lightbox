@@ -1,6 +1,6 @@
 export interface PreviewItem {
   url: string;
-  type: "image" | "pdf" | "other";
+  type: "image" | "pdf" | "video" | "other";
   name: string;
 }
 

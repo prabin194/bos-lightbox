@@ -1,17 +1,21 @@
 # bos-lightbox
 
-A framework-agnostic document preview lightbox web component. Built with Lit, supports images, PDFs, and other file types with keyboard navigation and touch gestures.
+A React lightbox component for previewing images, PDFs, videos, and other documents with keyboard navigation, zoom, touch support, and an imperative ref API.
 
 ## Features
 
-- 🖼️ **Image Preview** - Zoom, pan, and download images
-- 📄 **PDF Preview** - Native PDF viewer integration
-- 📱 **Touch Gestures** - Swipe navigation on mobile devices
-- ⌨️ **Keyboard Navigation** - Arrow keys, Escape to close
-- ♿ **Accessibility** - ARIA attributes, focus trapping
-- 🎨 **Customizable** - CSS variables for styling
-- 📦 **Framework Agnostic** - Works with any web framework
-- 🔗 **Circular Navigation** - Optional loop through items
+- 🖼️ **Image Preview** — Zoom, pan (drag when zoomed), and download images
+- 📄 **PDF Preview** — Native PDF viewer integration via iframe
+- 🎬 **Video Support** — Native `<video>` playback with controls and autoplay
+- 📱 **Touch Gestures** — Swipe navigation on mobile devices
+- ⌨️ **Keyboard Navigation** — Arrow keys, Escape to close (modal and inline)
+- ♿ **Accessibility** — ARIA attributes, focus trapping via native `<dialog>`, screen reader support
+- 🔗 **Circular Navigation** — Optional loop through items
+- 🎨 **Customizable** — `className`, `style`, and `renderItem` props for full control
+- 🎯 **TypeScript** — Full type definitions included
+- 🎞️ **Animations** — Smooth fade-in on open and fade transitions between items
+- 📦 **Lightweight** — No external dependencies beyond React. Tree-shakeable ESM and UMD builds
+- 🖥️ **SSR Compatible** — Safe for server-side rendering environments
 
 ## Installation
 
@@ -19,314 +23,165 @@ A framework-agnostic document preview lightbox web component. Built with Lit, su
 npm install bos-lightbox
 ```
 
-## Usage
-
-### Basic Usage
-
-```html
-<script type="module">
-  import 'bos-lightbox';
-</script>
-
-<document-preview id="lightbox"></document-preview>
-
-<button onclick="openLightbox()">Open Gallery</button>
-
-<script>
-  const lightbox = document.getElementById('lightbox');
-  
-  function openLightbox() {
-    lightbox.items = [
-      { type: 'image', url: 'image1.jpg', name: 'Image 1' },
-      { type: 'pdf', url: 'document.pdf', name: 'Document' },
-      { type: 'image', url: 'image2.jpg', name: 'Image 2' }
-    ];
-    lightbox.open = true;
-  }
-</script>
-```
-
-### React Integration
-
-#### Option 1: React Wrapper Component (Recommended)
-
-```jsx
-import React, { useRef } from 'react';
-import { BosLightbox } from 'bos-lightbox/react';
-import 'bos-lightbox';
-
-function Gallery() {
-  const lightboxRef = useRef(null);
-  
-  const items = [
-    { type: 'image', url: 'image1.jpg', name: 'Image 1' },
-    { type: 'pdf', url: 'document.pdf', name: 'Document' },
-    { type: 'image', url: 'image2.jpg', name: 'Image 2' }
-  ];
-  
-  const handleOpen = () => console.log('Lightbox opened');
-  const handleClose = () => console.log('Lightbox closed');
-  const handleItemChange = (detail) => console.log('Item changed:', detail);
-  
-  return (
-    <>
-      <BosLightbox
-        ref={lightboxRef}
-        items={items}
-        open={true}
-        initialIndex={0}
-        loop={true}
-        onOpen={handleOpen}
-        onClose={handleClose}
-        onItemChange={handleItemChange}
-      />
-      
-      <button onClick={() => lightboxRef.current?.openAt(0)}>
-        Open Image 1
-      </button>
-      <button onClick={() => lightboxRef.current?.openAt(1)}>
-        Open PDF
-      </button>
-    </>
-  );
-}
-```
-
-#### Option 2: React Hook Integration
-
-```jsx
-import React from 'react';
-import { useBosLightbox } from 'bos-lightbox/react';
-import 'bos-lightbox';
-
-function Gallery() {
-  const items = [
-    { type: 'image', url: 'image1.jpg', name: 'Image 1' },
-    { type: 'pdf', url: 'document.pdf', name: 'Document' }
-  ];
-  
-  const {
-    isOpen,
-    currentIndex,
-    currentItem,
-    open,
-    close,
-    next,
-    prev,
-    goTo,
-    lightboxProps
-  } = useBosLightbox({
-    items,
-    loop: true,
-    downloadable: true
-  });
-  
-  return (
-    <>
-      <document-preview {...lightboxProps} />
-      
-      <div className="gallery">
-        {items.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => open(index)}
-            className="thumbnail"
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
-      
-      {isOpen && (
-        <div className="controls">
-          <button onClick={prev} disabled={currentIndex === 0}>
-            Previous
-          </button>
-          <span>
-            {currentIndex + 1} / {items.length}
-          </span>
-          <button onClick={next} disabled={currentIndex === items.length - 1}>
-            Next
-          </button>
-          <button onClick={close}>Close</button>
-        </div>
-      )}
-    </>
-  );
-}
-```
-
-#### Option 3: Direct Web Component Usage
-
-```jsx
-import { useEffect, useRef } from 'react';
-import 'bos-lightbox';
-
-function Gallery() {
-  const lightboxRef = useRef(null);
-  
-  const items = [
-    { type: 'image', url: 'image1.jpg', name: 'Image 1' },
-    { type: 'pdf', url: 'document.pdf', name: 'Document' }
-  ];
-  
-  const openLightbox = (index) => {
-    lightboxRef.current.items = items;
-    lightboxRef.current.openAt(index);
-  };
-  
-  return (
-    <>
-      <document-preview ref={lightboxRef} />
-      <button onClick={() => openLightbox(0)}>Open Image</button>
-      <button onClick={() => openLightbox(1)}>Open PDF</button>
-    </>
-  );
-}
-```
-
-#### TypeScript Support
+## Quick Start
 
 ```tsx
-import React, { useRef } from 'react';
-import { BosLightbox, BosLightboxRef } from 'bos-lightbox/react';
-import type { PreviewItem } from 'bos-lightbox';
+import { useState } from "react";
+import { BosLightbox } from "bos-lightbox";
+import type { PreviewItem } from "bos-lightbox";
 
-interface GalleryProps {
-  items: PreviewItem[];
-}
+function Gallery() {
+  const [open, setOpen] = useState(false);
 
-function Gallery({ items }: GalleryProps) {
-  const lightboxRef = useRef<BosLightboxRef>(null);
-  
-  const handleItemChange = (detail: {
-    previousIndex: number;
-    currentIndex: number;
-    item: PreviewItem;
-  }) => {
-    console.log('Changed to:', detail.item.name);
-  };
-  
+  const items: PreviewItem[] = [
+    { url: "image1.jpg", type: "image", name: "Photo" },
+    { url: "doc.pdf",    type: "pdf",   name: "Document" },
+    { url: "video.mp4",  type: "video", name: "Clip" },
+    { url: "file.zip",   type: "other", name: "Archive" },
+  ];
+
   return (
-    <BosLightbox
-      ref={lightboxRef}
-      items={items}
-      open={false}
-      onItemChange={handleItemChange}
-    />
+    <>
+      <button onClick={() => setOpen(true)}>Open Gallery</button>
+      <BosLightbox
+        items={items}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+    </>
   );
 }
 ```
 
-### Vue Integration
+## Imperative Ref API
 
-```vue
-<template>
-  <div>
-    <document-preview 
-      ref="lightbox"
-      :items="items"
-      :open="isOpen"
-      @close="isOpen = false"
-    />
-    
-    <button @click="openLightbox(0)">Open Gallery</button>
-  </div>
-</template>
+For more control, use the `ref` prop:
 
-<script>
-import 'bos-lightbox';
+```tsx
+import { useRef, useState } from "react";
+import { BosLightbox } from "bos-lightbox";
+import type { BosLightboxRef, PreviewItem } from "bos-lightbox";
 
-export default {
-  data() {
-    return {
-      isOpen: false,
-      items: [
-        { type: 'image', url: 'image1.jpg', name: 'Image 1' },
-        { type: 'pdf', url: 'document.pdf', name: 'Document' }
-      ]
-    };
-  },
-  methods: {
-    openLightbox(index) {
-      this.$refs.lightbox.openAt(index);
-      this.isOpen = true;
-    }
-  }
-};
-</script>
+function Gallery() {
+  const ref = useRef<BosLightboxRef>(null);
+  const [open, setOpen] = useState(false);
+
+  const items: PreviewItem[] = [
+    { url: "image1.jpg", type: "image", name: "Landscape" },
+    { url: "doc.pdf",    type: "pdf",   name: "Report" },
+    { url: "arch.zip",   type: "other", name: "Archive" },
+  ];
+
+  return (
+    <>
+      <BosLightbox ref={ref} items={items} open={open} onClose={() => setOpen(false)} />
+      <button onClick={() => ref.current?.openAt(0)}>Open Landscape</button>
+      <button onClick={() => ref.current?.next()}>Next</button>
+      <button onClick={() => ref.current?.prev()}>Previous</button>
+    </>
+  );
+}
 ```
 
-## API
+## Display Modes
 
-### Properties
+### Modal (default)
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `items` | `PreviewItem[]` | `[]` | Array of items to preview |
-| `open` | `boolean` | `false` | Whether the lightbox is open |
+Uses the native `<dialog>` element with a focus trap, backdrop blur, and Escape-to-close behavior.
+
+```tsx
+<BosLightbox items={items} open={open} displayMode="modal" onClose={() => setOpen(false)} />
+```
+
+### Inline (full-page overlay)
+
+Renders as a fixed-position overlay without the `<dialog>` element — useful when you need full control over the overlay behavior. Inline mode supports Escape-to-close and overlay click-to-close just like modal mode.
+
+```tsx
+<BosLightbox items={items} open={open} displayMode="inline" onClose={() => setOpen(false)} />
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `PreviewItem[]` | — (required) | Array of items to preview |
+| `open` | `boolean` | — (required) | Whether the lightbox is open |
 | `initialIndex` | `number` | `0` | Index of the item to show when opened |
-| `loop` | `boolean` | `false` | Enable circular navigation |
-| `closeOnOverlay` | `boolean` | `true` | Close when clicking the overlay |
+| `loop` | `boolean` | `false` | Enable circular navigation (last ↔ first) |
+| `closeOnOverlay` | `boolean` | `true` | Close when clicking the overlay background |
 | `closeOnEscape` | `boolean` | `true` | Close when pressing Escape |
-| `downloadable` | `boolean` | `true` | Show the download button |
-| `displayMode` | `'modal' \| 'inline'` | `'modal'` | Display mode |
+| `downloadable` | `boolean` | `true` | Show the download button in the header |
+| `displayMode` | `"modal" \| "inline"` | `"modal"` | Display mode |
+| `renderItem` | `(item) => ReactNode` | — | Custom render function for item content |
+| `className` | `string` | — | CSS class for the root element |
+| `style` | `React.CSSProperties` | — | Inline styles for the root element |
+| `onOpen` | `() => void` | — | Callback when the lightbox opens |
+| `onClose` | `() => void` | — | Callback when the lightbox closes |
+| `onItemChange` | `(detail) => void` | — | Callback with `{ previousIndex, currentIndex, item }` |
+| `onDownload` | `(detail) => void` | — | Callback with `{ item }` when download is triggered |
+| `onError` | `(detail) => void` | — | Callback with `{ item, error }` on load errors |
 
-### PreviewItem Interface
+### PreviewItem
 
 ```typescript
 interface PreviewItem {
-  type: 'image' | 'pdf' | 'other';
+  type: "image" | "pdf" | "video" | "other";
   url: string;
   name: string;
 }
 ```
 
-### Methods
+### renderItem
 
-| Method | Parameters | Description |
-|--------|------------|-------------|
-| `openAt(index)` | `index: number` | Open lightbox at specific item |
-| `goTo(index)` | `index: number` | Navigate to specific item |
-| `next()` | - | Navigate to next item |
-| `prev()` | - | Navigate to previous item |
+For complete control over content rendering, pass a custom function:
 
-### Events
-
-| Event | Detail | Description |
-|-------|--------|-------------|
-| `open` | - | Fired when lightbox opens |
-| `close` | - | Fired when lightbox closes |
-| `item-change` | `{ previousIndex, currentIndex, item }` | Fired when current item changes |
-| `download` | `{ item }` | Fired when download is triggered |
-| `error` | `{ item, error }` | Fired when an error occurs |
-
-## Styling
-
-The component uses CSS variables for customization:
-
-```css
-document-preview {
-  --overlay-bg: rgba(0, 0, 0, 0.8);
-  --container-bg: #fff;
-  --header-bg: #f5f5f5;
-  --text-color: #333;
-  --border-color: #ddd;
-  --button-bg: #fff;
-  --button-hover-bg: #f0f0f0;
-}
+```tsx
+<BosLightbox
+  items={items}
+  open={open}
+  onClose={() => setOpen(false)}
+  renderItem={(item) => {
+    if (item.type === "image") {
+      return <CustomImageViewer url={item.url} />;
+    }
+    // Fall back to default rendering for other types
+    return null; // or <DefaultViewer />
+  }}
+/>
 ```
+
+When `renderItem` is provided, it takes precedence over the built-in type-based rendering. Return `null` to render nothing for a particular item.
+
+### Ref Methods (`BosLightboxRef`)
+
+| Method | Description |
+|--------|-------------|
+| `openAt(index: number)` | Open the lightbox at a specific item index |
+| `goTo(index: number)` | Navigate to a specific item by index |
+| `next()` | Navigate to the next item |
+| `prev()` | Navigate to the previous item |
+| `close()` | Close the lightbox programmatically |
+| `getCurrentIndex()` | Return the current item index |
+| `getCurrentItem()` | Return the current item object |
 
 ## Keyboard Shortcuts
 
-- `Arrow Left` - Previous item
-- `Arrow Right` - Next item
-- `Escape` - Close lightbox
+| Key | Action |
+|-----|--------|
+| `←` Arrow Left | Previous item |
+| `→` Arrow Right | Next item |
+| `Esc` | Close lightbox (modal and inline) |
 
 ## Touch Gestures
 
-- Swipe left/right - Navigate between items
-- Tap on overlay - Close lightbox (if `closeOnOverlay` is true)
+- Swipe left/right — Navigate between items
+- Tap on overlay — Close lightbox (if `closeOnOverlay` is `true`)
+
+## Touch Gestures
+
+- Swipe left/right — Navigate between items
+- Tap on overlay — Close lightbox (if `closeOnOverlay` is `true`)
 
 ## Browser Support
 
@@ -334,10 +189,6 @@ document-preview {
 - Firefox 63+
 - Safari 10.1+
 - Edge 79+
-
-## Dependencies
-
-- Lit 3.x
 
 ## License
 

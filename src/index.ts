@@ -1,6 +1,3 @@
-import { DocumentPreview } from "./document-preview";
-
-customElements.define("document-preview", DocumentPreview);
-
-export { DocumentPreview };
+export { BosLightbox } from "./BosLightbox";
+export type { BosLightboxProps, BosLightboxRef } from "./BosLightbox";
 export type { PreviewItem, DownloadEventDetail, ItemChangeEventDetail, ErrorEventDetail } from "./types";

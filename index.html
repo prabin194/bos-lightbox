@@ -3,91 +3,444 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document Preview — Demo</title>
+    <title>BosLightbox — React lightbox component</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: #f5f5f5;
-        color: #333;
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --bg-primary: #000000;
+        --bg-secondary: #0a0a0b;
+        --bg-card: #111113;
+        --bg-card-hover: #18181b;
+        --bg-code: #0d0d0f;
+        --border: #1c1c1f;
+        --border-hover: #2a2a2e;
+        --text-primary: #f5f5f7;
+        --text-secondary: #8e8e93;
+        --text-muted: #636366;
+        --accent: #5e5ce6;
+        --accent-hover: #6b69f0;
+        --accent-subtle: rgba(94,92,230,0.12);
+        --warning: #f5a623;
+        --warning-bg: rgba(245,166,35,0.08);
+        --success: #34c759;
+        --success-bg: rgba(52,199,89,0.08);
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 14px;
       }
 
+      html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+      body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      /* ─── Navigation ─── */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 32px;
+        max-width: 1200px;
+        margin: 0 auto;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: -0.3px;
+      }
+      .nav-brand svg { width: 22px; height: 22px; }
+      .nav-brand .version {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-muted);
+        background: var(--bg-card);
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+      }
+
+      .nav-links { display: flex; align-items: center; gap: 8px; }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.15s, background 0.15s;
+      }
+      .nav-link:hover { color: var(--text-primary); background: var(--bg-card); }
+      .nav-link svg { width: 16px; height: 16px; }
+
+      /* ─── Container ─── */
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+      /* ─── Hero ─── */
       .hero {
-        background: linear-gradient(135deg, #111 0%, #1a1a2e 100%);
+        text-align: center;
+        padding: 80px 32px 64px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .hero .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 20px;
+        padding: 5px 14px;
+        border-radius: 999px;
+        background: var(--accent-subtle);
+        border: 1px solid rgba(94,92,230,0.2);
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--accent);
+      }
+      .hero h1 {
+        font-size: clamp(36px, 6vw, 64px);
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+        margin-bottom: 16px;
+      }
+      .hero h1 .highlight {
+        background: linear-gradient(135deg, var(--accent), #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero p {
+        font-size: 17px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto 32px;
+        line-height: 1.7;
+      }
+
+      .install-block {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        font-family: var(--font-mono);
+        font-size: 14px;
+      }
+      .install-block .prompt {
+        padding: 12px 0 12px 16px;
+        color: var(--text-muted);
+        user-select: none;
+      }
+      .install-block .command {
+        padding: 12px 16px 12px 8px;
+        color: var(--text-primary);
+      }
+      .install-block .copy-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 12px 16px;
+        background: var(--accent);
+        border: none;
         color: #fff;
-        padding: 64px 40px 48px;
+        font-family: var(--font-sans);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .install-block .copy-btn:hover { background: var(--accent-hover); }
+      .install-block .copy-btn svg { width: 14px; height: 14px; }
+
+      .github-stars {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 20px;
+        padding: 6px 14px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        font-size: 13px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: border-color 0.15s;
+      }
+      .github-stars:hover { border-color: var(--border-hover); }
+      .github-stars svg { width: 16px; height: 16px; }
+
+      /* ─── Metrics Bar ─── */
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: 64px;
+      }
+      .metric-card {
+        background: var(--bg-card);
+        padding: 28px 24px;
         text-align: center;
       }
-      .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-      .hero p { font-size: 15px; color: #9ca3af; max-width: 560px; margin: 0 auto; line-height: 1.6; }
-      .hero .badge {
-        display: inline-block;
-        margin-bottom: 16px;
-        padding: 4px 12px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.1);
-        font-size: 12px;
-        color: #93c5fd;
-        letter-spacing: 0.5px;
-      }
-
-      .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
-
-      section { padding: 48px 0; }
-      section + section { border-top: 1px solid #e5e7eb; }
-
-      .section-title {
-        font-size: 18px;
-        font-weight: 600;
+      .metric-card .value {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
         margin-bottom: 4px;
       }
-      .section-desc {
+      .metric-card .label {
         font-size: 13px;
-        color: #6b7280;
-        margin-bottom: 24px;
+        color: var(--text-muted);
       }
 
-      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-      .card {
-        background: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 24px;
+      /* ─── Section ─── */
+      section { padding: 64px 0; }
+      .section-header {
+        margin-bottom: 32px;
+      }
+      .section-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        margin-bottom: 8px;
+      }
+      .section-header p {
+        font-size: 14px;
+        color: var(--text-secondary);
+        max-width: 560px;
+      }
+
+      /* ─── Gallery Grid ─── */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .gallery-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 28px 20px;
         text-align: center;
         cursor: pointer;
-        transition: box-shadow 0.2s, transform 0.15s;
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        outline: none;
       }
-      .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-      .card:focus-visible {
-        outline: 2px solid #2563eb;
-        outline-offset: 2px;
+      .gallery-card:hover {
+        background: var(--bg-card-hover);
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
       }
-      .card svg { width: 48px; height: 48px; margin-bottom: 12px; color: #666; }
-      .card .name { font-size: 14px; font-weight: 500; }
-      .card .type { font-size: 11px; color: #9ca3af; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+      .gallery-card:focus-visible {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-subtle);
+      }
+      .gallery-card .icon-wrap {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-sm);
+        background: rgba(255,255,255,0.04);
+      }
+      .gallery-card .icon-wrap svg { width: 22px; height: 22px; color: var(--text-secondary); }
+      .gallery-card .name {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: var(--text-primary);
+      }
+      .gallery-card .type-badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .type-image { background: rgba(94,92,230,0.12); color: #8b89f0; }
+      .type-pdf { background: rgba(245,166,35,0.1); color: #f5a623; }
+      .type-other { background: rgba(142,142,147,0.12); color: #8e8e93; }
 
-      .code-block {
-        background: #1e1e2e;
-        border-radius: 10px;
-        padding: 20px 24px;
-        overflow-x: auto;
-        position: relative;
+      /* ─── Demo Controls ─── */
+      .demo-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
       }
+      .demo-controls button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 16px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        font-family: var(--font-sans);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+      }
+      .demo-controls button:hover {
+        background: var(--bg-card-hover);
+        border-color: var(--border-hover);
+        color: var(--text-primary);
+      }
+      .demo-controls button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .demo-controls button.primary:hover { background: var(--accent-hover); }
+
+      /* ─── Event Log ─── */
+      .event-log-wrap {
+        margin-top: 16px;
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      .event-log-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .event-log-header .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+      }
+      .event-log {
+        padding: 12px 14px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        max-height: 180px;
+        overflow-y: auto;
+        color: var(--text-muted);
+      }
+      .event-log .entry { color: var(--text-secondary); padding: 3px 0; }
+      .event-log .entry .time { color: var(--text-muted); }
+
+      /* ─── Inline Preview Container ─── */
+      .inline-preview-container {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-top: 20px;
+      }
+      .inline-preview-container h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .inline-preview-container > p {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+      }
+
+      /* ─── Two Column Layout ─── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        align-items: start;
+      }
+      @media (max-width: 800px) {
+        .two-col { grid-template-columns: 1fr; }
+      }
+
+      /* ─── Code Blocks ─── */
+      .code-block {
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      .code-block .code-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .code-block .code-header .dots {
+        display: flex;
+        gap: 6px;
+      }
+      .code-block .code-header .dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .code-block .code-header .dots span:nth-child(1) { background: #ff5f56; }
+      .code-block .code-header .dots span:nth-child(2) { background: #ffbd2e; }
+      .code-block .code-header .dots span:nth-child(3) { background: #27c93f; }
       .code-block pre {
-        font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+        padding: 16px 18px;
+        font-family: var(--font-mono);
         font-size: 13px;
         line-height: 1.7;
         color: #e4e4e7;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
-      .code-block .comment { color: #6b7280; }
-      .code-block .keyword { color: #c792ea; }
-      .code-block .string { color: #c3e88d; }
-      .code-block .tag { color: #f07178; }
-      .code-block .attr { color: #ffcb6b; }
-      .code-block .punctuation { color: #89ddff; }
-      .code-block .function { color: #82aaff; }
-      .code-block .number { color: #f78c6c; }
+      .code-block .kw { color: #c792ea; }
+      .code-block .s { color: #c3e88d; }
+      .code-block .f { color: #82aaff; }
+      .code-block .c { color: #6b7280; }
+      .code-block .p { color: #89ddff; }
+      .code-block .n { color: #f78c6c; }
+      .code-block .t { color: #f07178; }
+      .code-block .a { color: #ffcb6b; }
 
+      /* ─── API Table ─── */
+      .api-table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+      }
       .api-table {
         width: 100%;
         border-collapse: collapse;
@@ -95,428 +448,838 @@
       }
       .api-table th {
         text-align: left;
-        padding: 10px 12px;
-        background: #f9fafb;
-        border-bottom: 2px solid #e5e7eb;
+        padding: 12px 16px;
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border);
         font-weight: 600;
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        color: #6b7280;
+        color: var(--text-muted);
       }
       .api-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid #f3f4f6;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
         vertical-align: top;
+        color: var(--text-secondary);
       }
+      .api-table tr:last-child td { border-bottom: none; }
       .api-table code {
-        font-family: 'JetBrains Mono', monospace;
+        font-family: var(--font-mono);
         font-size: 12px;
-        background: #f3f4f6;
+        background: rgba(255,255,255,0.05);
         padding: 2px 6px;
         border-radius: 4px;
-        color: #1f2937;
+        color: var(--text-primary);
       }
       .api-table .type-badge {
         display: inline-block;
-        padding: 1px 8px;
+        padding: 2px 8px;
         border-radius: 4px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      .api-table .type-required { background: var(--accent-subtle); color: var(--accent); }
+      .api-table .type-event { background: var(--warning-bg); color: var(--warning); }
+      .api-table .type-optional { background: var(--success-bg); color: var(--success); }
+
+      .api-section-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 40px;
+        margin-bottom: 4px;
+      }
+      .api-section-desc {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+      }
+      .api-table td:first-child code { font-weight: 500; }
+
+      /* ─── Footer ─── */
+      footer {
+        text-align: center;
+        padding: 32px;
+        border-top: 1px solid var(--border);
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      /* ─── Scrollbar ─── */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+      /* ─── Section divider ─── */
+      .section-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+      /* ═══════════════════════ Props Playground ═══════════════════════ */
+
+      .playground {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+      @media (max-width: 860px) {
+        .playground { grid-template-columns: 1fr; }
+      }
+
+      .playground-controls {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .playground-controls-inner {
+        padding: 20px;
+      }
+      .playground-panel-title {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .pg-field { margin-bottom: 14px; }
+
+      .pg-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .pg-label-text {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        font-family: var(--font-mono);
+        font-size: 12px;
+      }
+
+      .pg-select {
+        appearance: none;
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 6px 28px 6px 10px;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%238e8e93' stroke-width='1.5'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        transition: border-color 0.15s;
+      }
+      .pg-select:hover { border-color: var(--border-hover); }
+      .pg-select:focus-visible { border-color: var(--accent); outline: none; }
+
+      .pg-number {
+        width: 56px;
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 6px 10px;
+        text-align: center;
+        transition: border-color 0.15s;
+      }
+      .pg-number:focus-visible { border-color: var(--accent); outline: none; }
+
+      /* Toggle switch */
+      .pg-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        cursor: pointer;
+      }
+      .pg-toggle input { display: none; }
+      .pg-toggle-track {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        border-radius: 999px;
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        transition: background 0.2s, border-color 0.2s;
+        flex-shrink: 0;
+      }
+      .pg-toggle input:checked + .pg-toggle-track {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+      .pg-toggle-thumb {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--text-muted);
+        transition: transform 0.2s, background 0.2s;
+      }
+      .pg-toggle input:checked + .pg-toggle-track .pg-toggle-thumb {
+        transform: translateX(16px);
+        background: #fff;
+      }
+
+      .pg-open-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 10px 16px;
+        margin-top: 8px;
+        border-radius: var(--radius-sm);
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-family: var(--font-sans);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .pg-open-btn:hover { background: var(--accent-hover); }
+
+      .pg-hint {
+        margin-top: 12px;
+        font-size: 11px;
+        color: var(--text-muted);
+        line-height: 1.5;
+        text-align: center;
+        font-style: italic;
+      }
+
+      /* ── Preview Side ── */
+      .playground-preview {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .playground-preview-area {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .playground-preview-placeholder {
+        text-align: center;
+        padding: 40px 24px;
+      }
+      .playground-preview-placeholder p {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .playground-code {
+        background: var(--bg-code);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      .pg-code-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .pg-copy-btn {
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: var(--font-sans);
         font-size: 11px;
         font-weight: 500;
-      }
-      .type-prop { background: #dbeafe; color: #1d4ed8; }
-      .type-event { background: #fce7f3; color: #be185d; }
-      .type-attr { background: #d1fae5; color: #047857; }
-
-      .demo-controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 16px;
-        align-items: center;
-      }
-      .demo-controls button {
-        padding: 8px 16px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: #fff;
-        font-size: 13px;
         cursor: pointer;
         transition: background 0.15s, border-color 0.15s;
       }
-      .demo-controls button:hover {
-        background: #f9fafb;
-        border-color: #9ca3af;
+      .pg-copy-btn:hover {
+        background: var(--bg-card);
+        border-color: var(--border-hover);
       }
-      .demo-controls button.primary {
-        background: #2563eb;
-        border-color: #2563eb;
+      .pg-code-pre {
+        padding: 14px 16px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        line-height: 1.6;
+        color: #e4e4e7;
+        overflow-x: auto;
+        white-space: pre;
+      }
+
+      /* ═══════════════════════ Code Examples ═══════════════════════ */
+
+      .examples-wrap { }
+      .examples-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 12px;
+        background: var(--bg-card);
+        padding: 4px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        display: inline-flex;
+      }
+      .examples-tab {
+        padding: 7px 14px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+      .examples-tab:hover { color: var(--text-primary); }
+      .examples-tab.active {
+        background: var(--accent);
         color: #fff;
       }
-      .demo-controls button.primary:hover { background: #1d4ed8; }
-
-      .event-log {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin-top: 12px;
-        font-size: 12px;
-        font-family: 'JetBrains Mono', monospace;
-        min-height: 40px;
-        color: #6b7280;
+      .examples-code {
+        padding: 18px 20px;
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        line-height: 1.7;
+        color: #e4e4e7;
+        overflow-x: auto;
+        white-space: pre;
       }
-      .event-log .entry { color: #1f2937; padding: 2px 0; }
-      .event-log .entry .time { color: #9ca3af; }
 
-      .footer {
-        text-align: center;
-        padding: 24px;
-        font-size: 12px;
-        color: #9ca3af;
-        border-top: 1px solid #e5e7eb;
+      /* ═══════════════════════ Feature Showcase ═══════════════════════ */
+
+      .demo-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .demo-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .demo-card:hover { border-color: var(--border-hover); }
+
+      .demo-card-preview {
+        position: relative;
+        height: 140px;
+        background: var(--bg-code);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .demo-card-animation {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .demo-card-play {
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,0.3);
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s, background 0.15s;
+        transform: scale(0.9);
+      }
+      .demo-card:hover .demo-card-play {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .demo-card-play:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+      @media (hover: none) {
+        .demo-card-play {
+          opacity: 1;
+          transform: scale(1);
+          width: 40px;
+          height: 40px;
+          background: rgba(0,0,0,0.6);
+        }
+      }
+      .demo-card-play svg { width: 18px; height: 18px; margin-left: 2px; }
+
+      .demo-card-body {
+        padding: 18px 20px 20px;
+      }
+      .demo-card-icon {
+        font-size: 22px;
+        display: block;
+        margin-bottom: 8px;
+      }
+      .demo-card-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .demo-card-desc {
+        font-size: 12.5px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      /* ── Animated demo previews ── */
+      .demo-anim-image-zoom {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .demo-anim-image-zoom::before {
+        content: "";
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, var(--accent), #a78bfa);
+        animation: demoZoom 2.5s ease-in-out infinite;
+      }
+      @keyframes demoZoom {
+        0%, 100% { transform: scale(1); opacity: 0.6; }
+        50% { transform: scale(1.4); opacity: 1; }
+      }
+
+      .demo-anim-pdf-preview {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 24px;
+      }
+      .demo-anim-pdf-preview::before,
+      .demo-anim-pdf-preview::after {
+        content: "";
+        height: 60px;
+        flex: 1;
+        border-radius: 4px;
+        background: var(--border);
+        animation: demoPdf 3s ease-in-out infinite;
+      }
+      .demo-anim-pdf-preview::after { animation-delay: 0.5s; }
+      @keyframes demoPdf {
+        0%, 100% { transform: scaleY(0.5); opacity: 0.4; }
+        50% { transform: scaleY(1); opacity: 0.8; }
+      }
+
+      .demo-anim-keyboard-nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .demo-anim-keyboard-nav::before,
+      .demo-anim-keyboard-nav::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        background: var(--bg-card);
+      }
+      .demo-anim-keyboard-nav::before { animation: demoKeyLeft 2s ease-in-out infinite; }
+      .demo-anim-keyboard-nav::after { animation: demoKeyRight 2s ease-in-out infinite; }
+      @keyframes demoKeyLeft {
+        0%, 100% { transform: translateX(0); opacity: 0.3; }
+        25% { transform: translateX(-6px); opacity: 1; background: var(--accent-subtle); border-color: var(--accent); }
+      }
+      @keyframes demoKeyRight {
+        0%, 100% { transform: translateX(0); opacity: 0.3; }
+        50% { transform: translateX(6px); opacity: 1; background: var(--accent-subtle); border-color: var(--accent); }
+      }
+
+      .demo-anim-touch-gestures {
+        width: 80px;
+        height: 60px;
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+      .demo-anim-touch-gestures::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0.6;
+        animation: demoFinger 2.5s ease-in-out infinite;
+      }
+      @keyframes demoFinger {
+        0%, 100% { left: 20%; transform: translate(-50%, -50%); }
+        50% { left: 80%; transform: translate(-50%, -50%); }
+      }
+
+      /* ═══════════════════════ Animations ═══════════════════════ */
+
+      :root {
+        --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* ── Hero entrance stagger ── */
+      .hero > * {
+        opacity: 0;
+        transform: translateY(18px);
+        animation: heroFadeIn 0.6s var(--ease-out-expo) forwards;
+      }
+      .hero > :nth-child(1) { animation-delay: 0.05s; }  /* badge */
+      .hero > :nth-child(2) { animation-delay: 0.15s; }  /* h1 */
+      .hero > :nth-child(3) { animation-delay: 0.3s; }   /* p */
+      .hero > :nth-child(4) { animation-delay: 0.45s; }  /* install block */
+      .hero > :nth-child(5) { animation-delay: 0.6s; }   /* github-stars */
+
+      @keyframes heroFadeIn {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── Typing animation ── */
+      .command-text {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
+        max-width: 0;
+        animation: typing 1.5s steps(24) forwards;
+        animation-delay: 0.5s;
+      }
+
+      .command-text::after {
+        content: "";
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        background: var(--accent);
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: cursorBlink 0.7s step-end infinite;
+        animation-delay: 2.0s;
+      }
+
+      @keyframes typing {
+        from { max-width: 0; }
+        to { max-width: 24ch; }
+      }
+
+      @keyframes cursorBlink {
+        50% { opacity: 0; }
+      }
+
+      /* ── Section fade-in on scroll ── */
+      .reveal-section {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+      }
+      .reveal-section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ── Staggered card entrance ── */
+      .stagger-card {
+        opacity: 0;
+        transform: translateY(16px);
+        animation: cardSlideUp 0.5s var(--ease-out-quart) forwards;
+      }
+
+      @keyframes cardSlideUp {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ── Reduced motion ── */
+      @media (prefers-reduced-motion: reduce) {
+        .hero > *,
+        .reveal-section,
+        .stagger-card,
+        .command-text {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+          max-width: 100% !important;
+        }
+        .command-text::after { display: none !important; }
+        .command-text { border-right: none !important; max-width: 100% !important; }
+      }
+      /* ═══════════════════════ Responsive ═══════════════════════ */
+
+      @media (max-width: 768px) {
+        nav { padding: 12px 16px; }
+
+        .container { padding: 0 16px; }
+
+        .hero {
+          padding: 48px 16px 40px;
+        }
+        .hero h1 { font-size: clamp(28px, 8vw, 36px); }
+        .hero p { font-size: 15px; }
+
+        .install-block {
+          font-size: 12px;
+          width: 100%;
+          max-width: 360px;
+        }
+        .install-block .prompt { padding: 10px 0 10px 12px; }
+        .install-block .command { padding: 10px 12px; overflow: hidden; }
+        .install-block .copy-btn { padding: 10px 12px; font-size: 12px; }
+
+        .command-text {
+          max-width: 0;
+          animation: typing 1.2s steps(24) forwards;
+          animation-delay: 0.3s;
+        }
+        .command-text::after { animation-delay: 1.5s; }
+        @keyframes typing {
+          from { max-width: 0; }
+          to { max-width: 24ch; }
+        }
+
+        .metrics {
+          grid-template-columns: 1fr;
+          border-radius: var(--radius-md);
+          margin-bottom: 40px;
+        }
+        .metric-card { padding: 20px 16px; }
+        .metric-card .value { font-size: 26px; }
+
+        section { padding: 40px 0; }
+        .section-header h2 { font-size: 20px; }
+        .section-header p { font-size: 13px; }
+
+        .gallery-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 8px;
+        }
+        .gallery-card {
+          padding: 16px 12px;
+        }
+        .gallery-card .icon-wrap {
+          width: 36px;
+          height: 36px;
+          margin: 0 auto 10px;
+        }
+        .gallery-card .icon-wrap svg { width: 18px; height: 18px; }
+        .gallery-card .name { font-size: 12px; }
+
+        .demo-controls button { font-size: 12px; padding: 8px 12px; }
+
+        .demo-cards-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .demo-card-preview { height: 110px; }
+
+        .playground {
+          grid-template-columns: 1fr;
+        }
+
+        .examples-tabs {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .examples-code {
+          font-size: 11px;
+          padding: 14px;
+        }
+
+        .pg-code-pre { font-size: 11px; padding: 12px; }
+
+        .api-table {
+          font-size: 12px;
+        }
+        .api-table th,
+        .api-table td { padding: 10px 12px; }
+
+        .code-block pre { font-size: 12px; padding: 14px; }
+
+        .two-col { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 480px) {
+        .gallery-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+        }
+        .gallery-card {
+          padding: 12px 8px;
+        }
+        .gallery-card .icon-wrap {
+          width: 32px;
+          height: 32px;
+          margin: 0 auto 8px;
+        }
+        .gallery-card .icon-wrap svg { width: 16px; height: 16px; }
+        .gallery-card .name { font-size: 11px; }
+        .gallery-card .type-badge { font-size: 9px; padding: 1px 7px; }
+
+        .hero h1 { font-size: clamp(24px, 10vw, 28px); }
+        .hero p { font-size: 14px; }
+
+        .install-block { font-size: 11px; }
+
+        .metrics { border-radius: var(--radius-sm); }
+        .metric-card { padding: 16px 12px; }
+
+        .event-log-header { font-size: 10px; padding: 8px 12px; }
+        .event-log { font-size: 11px; padding: 10px 12px; }
+
+        .demo-card-body { padding: 14px 16px 16px; }
+        .demo-card-title { font-size: 13px; }
+        .demo-card-desc { font-size: 12px; }
+      }
+
+      /* ── Hamburger nav ── */
+      .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 110;
+      }
+      .nav-hamburger span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--text-secondary);
+        border-radius: 1px;
+        transition: transform 0.25s, opacity 0.25s;
+      }
+      .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+      .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+      @media (max-width: 768px) {
+        .nav-hamburger { display: flex; }
+
+        .nav-links {
+          position: fixed;
+          top: 0;
+          right: -280px;
+          width: 260px;
+          height: 100vh;
+          flex-direction: column;
+          gap: 4px;
+          padding: 72px 20px 24px;
+          background: var(--bg-secondary);
+          border-left: 1px solid var(--border);
+          transition: right 0.3s var(--ease-out-expo);
+          z-index: 100;
+          align-items: stretch;
+        }
+        .nav-links.open {
+          right: 0;
+        }
+
+        .nav-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.6);
+          z-index: 99;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s;
+        }
+        .nav-overlay.open {
+          opacity: 1;
+          pointer-events: all;
+        }
+
+        .nav-link {
+          padding: 12px 14px;
+          font-size: 15px;
+          border-radius: var(--radius-sm);
+        }
       }
     </style>
   </head>
   <body>
+    <nav>
+      <div class="nav-brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        BosLightbox
+        <span class="version">v0.1.0</span>
+      </div>
+      <div class="nav-links" id="nav-links">
+        <a class="nav-link" href="https://github.com/prabin194/bos-lightbox" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-overlay" id="nav-overlay"></div>
+    </nav>
 
-    <div class="hero">
-      <div class="badge">Web Component — Lit</div>
-      <h1>&lt;document-preview&gt;</h1>
-      <p>Framework-agnostic document preview lightbox. Supports images, PDFs, and other file types with keyboard navigation.</p>
-    </div>
+    <div id="root"></div>
 
-    <div class="container">
+    <footer>MIT License &middot; Built with React 18+ &middot; Created by Prabin Paudel</footer>
 
-      <!-- Demo Grid -->
-      <section>
-        <h2 class="section-title">Modal Demo</h2>
-        <p class="section-desc">Click any card to open the preview lightbox. Use <kbd>←</kbd> <kbd>→</kbd> to navigate, <kbd>Esc</kbd> to close.</p>
-
-        <div class="grid" id="demo-grid"></div>
-
-        <demo-controls class="demo-controls">
-          <button class="primary" id="btn-open-first">Open First Item</button>
-          <button id="btn-toggle-event">Enable Event Logging</button>
-        </demo-controls>
-
-        <div class="event-log" id="event-log">Waiting for events…</div>
-      </section>
-
-      <!-- Full-Page Demo -->
-      <section>
-        <h2 class="section-title">Full-Page Demo (Dialog-like)</h2>
-        <p class="section-desc">Preview attachments in full-page mode like a dialog box. This provides a focused viewing experience while maintaining the same-screen context.</p>
-
-        <demo-controls class="demo-controls">
-          <button class="primary" id="btn-open-inline">Open Full-Page Preview</button>
-          <button id="btn-close-inline">Close Preview</button>
-          <button id="btn-next-inline">Next Item</button>
-          <button id="btn-prev-inline">Previous Item</button>
-        </demo-controls>
-
-        <div style="margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
-          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Full-Page Preview Component</h3>
-          <p style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">The preview component is embedded here but will display full-page when opened:</p>
-          <document-preview id="inline-preview" display-mode="inline"></document-preview>
-        </div>
-      </section>
-
-      <!-- How to Use -->
-      <section>
-        <h2 class="section-title">How to Use</h2>
-        <p class="section-desc">Install via npm or use directly from a CDN.</p>
-
-        <div class="code-block">
-          <pre><span class="comment"># Install</span>
-<span class="punctuation">$</span> npm install document-preview</pre>
-        </div>
-
-        <p style="margin:16px 0 8px;font-size:13px;color:#6b7280;">Then import and use in your project:</p>
-
-        <div class="code-block">
-          <pre><span class="keyword">import</span> <span class="string">'document-preview'</span>;
-
-<span class="comment">// Define your items</span>
-<span class="keyword">const</span> items = [
-  { url: <span class="string">'image.jpg'</span>, type: <span class="string">'image'</span>, name: <span class="string">'Photo'</span> },
-  { url: <span class="string">'doc.pdf'</span>,   type: <span class="string">'pdf'</span>,   name: <span class="string">'Document'</span> },
-  { url: <span class="string">'file.zip'</span>,  type: <span class="string">'other'</span>, name: <span class="string">'Archive'</span> },
-];
-
-<span class="comment">// Get the element</span>
-<span class="keyword">const</span> preview = <span class="function">document.querySelector</span>(<span class="string">'document-preview'</span>);
-
-<span class="comment">// Open at a specific index</span>
-preview.items = items;
-preview.initialIndex = <span class="number">0</span>;
-preview.open = <span class="keyword">true</span>;
-
-<span class="comment">// Listen for events</span>
-preview.<span class="function">addEventListener</span>(<span class="string">'close'</span>, <span class="punctuation">()</span> => <span class="function">console</span>.<span class="function">log</span>(<span class="string">'closed'</span>));
-preview.<span class="function">addEventListener</span>(<span class="string">'download'</span>, <span class="punctuation">(</span>e<span class="punctuation">)</span> => <span class="function">console</span>.<span class="function">log</span>(e.detail));</pre>
-        </div>
-
-        <p style="margin:24px 0 8px;font-size:13px;color:#6b7280;">For full-page dialog-like preview, set display-mode attribute:</p>
-
-        <div class="code-block">
-          <pre><span class="comment"><!-- Full-page inline mode --></span>
-<span class="tag">&lt;document-preview</span> <span class="attr">id</span>=<span class="string">"preview"</span> <span class="attr">display-mode</span>=<span class="string">"inline"</span><span class="tag">&gt;&lt;/document-preview&gt;</span>
-
-<span class="tag">&lt;script&gt;</span>
-  preview.items = items;
-  preview.open = <span class="keyword">true</span>; <span class="comment">// Opens full-page like a dialog box</span>
-<span class="tag">&lt;/script&gt;</span></pre>
-        </div>
-      </section>
-
-      <!-- CDN Usage -->
-      <section>
-        <h2 class="section-title">CDN (no build step)</h2>
-        <p class="section-desc">Use directly in any HTML page via a CDN.</p>
-
-        <div class="code-block">
-          <pre><span class="comment">&lt;!-- After publishing to npm --&gt;</span>
-<span class="tag">&lt;script</span> <span class="attr">type</span>=<span class="string">"module"</span><span class="tag">&gt;</span>
-  <span class="keyword">import</span> <span class="string">'https://unpkg.com/document-preview@latest/dist/document-preview.js'</span>;
-<span class="tag">&lt;/script&gt;</span>
-
-<span class="comment">&lt;!-- Or from a local build --&gt;</span>
-<span class="tag">&lt;script</span> <span class="attr">type</span>=<span class="string">"module"</span><span class="tag">&gt;</span>
-  <span class="keyword">import</span> <span class="string">'./dist/document-preview.js'</span>;
-<span class="tag">&lt;/script&gt;</span>
-
-<span class="tag">&lt;document-preview</span> <span class="attr">id</span>=<span class="string">"preview"</span><span class="tag">&gt;&lt;/document-preview&gt;</span></pre>
-        </div>
-      </section>
-
-      <!-- API -->
-      <section>
-        <h2 class="section-title">API Reference</h2>
-        <p class="section-desc">Properties, attributes, and events supported by the component.</p>
-
-        <table class="api-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>items</code></td>
-              <td><span class="type-badge type-prop">property</span></td>
-              <td>Array of <code>{url, type, name}</code> objects to preview</td>
-            </tr>
-            <tr>
-              <td><code>open</code></td>
-              <td><span class="type-badge type-attr">attribute</span></td>
-              <td>Boolean — shows/hides the lightbox</td>
-            </tr>
-            <tr>
-              <td><code>initial-index</code></td>
-              <td><span class="type-badge type-attr">attribute</span></td>
-              <td>Number — index of the item to show first</td>
-            </tr>
-            <tr>
-              <td><code>loop</code></td>
-              <td><span class="type-badge type-prop">property</span></td>
-              <td>Boolean — wrap navigation from last to first (default <code>false</code>)</td>
-            </tr>
-            <tr>
-              <td><code>close-on-overlay</code></td>
-              <td><span class="type-badge type-attr">attribute</span></td>
-              <td>Boolean — close when clicking the overlay background (default <code>true</code>)</td>
-            </tr>
-            <tr>
-              <td><code>close-on-escape</code></td>
-              <td><span class="type-badge type-attr">attribute</span></td>
-              <td>Boolean — close when pressing Escape (default <code>true</code>)</td>
-            </tr>
-            <tr>
-              <td><code>display-mode</code></td>
-              <td><span class="type-badge type-attr">attribute</span></td>
-              <td>String — <code>"modal"</code> for overlay with focus trap, <code>"inline"</code> for full-page dialog-like display (default <code>"modal"</code>)</td>
-            </tr>
-            <tr>
-              <td><code>downloadable</code></td>
-              <td><span class="type-badge type-prop">property</span></td>
-              <td>Boolean — show download button (default <code>true</code>)</td>
-            </tr>
-            <tr>
-              <td><code>open()</code> / <code>openAt(index)</code></td>
-              <td><span class="type-badge type-prop">method</span></td>
-              <td>Open the lightbox, optionally at a specific index</td>
-            </tr>
-            <tr>
-              <td><code>next()</code> / <code>prev()</code></td>
-              <td><span class="type-badge type-prop">method</span></td>
-              <td>Programmatically navigate between items</td>
-            </tr>
-            <tr>
-              <td><code>goTo(index)</code></td>
-              <td><span class="type-badge type-prop">method</span></td>
-              <td>Jump to a specific item by index</td>
-            </tr>
-            <tr>
-              <td><code>close</code></td>
-              <td><span class="type-badge type-event">event</span></td>
-              <td>Dispatched when the lightbox is closed</td>
-            </tr>
-            <tr>
-              <td><code>open</code></td>
-              <td><span class="type-badge type-event">event</span></td>
-              <td>Dispatched when the lightbox opens</td>
-            </tr>
-            <tr>
-              <td><code>item-change</code></td>
-              <td><span class="type-badge type-event">event</span></td>
-              <td>Dispatched on navigation. <code>e.detail</code> contains <code>{previousIndex, currentIndex, item}</code></td>
-            </tr>
-            <tr>
-              <td><code>download</code></td>
-              <td><span class="type-badge type-event">event</span></td>
-              <td>Dispatched when download is clicked. <code>e.detail.item</code> contains the item</td>
-            </tr>
-            <tr>
-              <td><code>error</code></td>
-              <td><span class="type-badge type-event">event</span></td>
-              <td>Dispatched when an image/PDF fails to load. <code>e.detail</code> contains <code>{item, error}</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-    </div>
-
-    <div class="footer">
-      MIT License &middot; Built with Lit
-    </div>
-
-    <document-preview id="preview"></document-preview>
-
-    <script type="module">
-      import './src/index.ts';
-
-      const items = [
-        {
-          url: 'https://picsum.photos/seed/doc1/800/600',
-          type: 'image',
-          name: 'Mountain Landscape',
-        },
-        {
-          url: 'https://picsum.photos/seed/doc2/800/600',
-          type: 'image',
-          name: 'City View',
-        },
-        {
-          url: 'https://picsum.photos/seed/doc3/800/600',
-          type: 'image',
-          name: 'Ocean Sunset',
-        },
-        {
-          url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-          type: 'pdf',
-          name: 'Sample PDF Document',
-        },
-        {
-          url: '#',
-          type: 'other',
-          name: 'sample-file.zip',
-        },
-      ];
-
-      const preview = document.getElementById('preview');
-      const inlinePreview = document.getElementById('inline-preview');
-      let eventLogging = false;
-
-      preview.addEventListener('close', () => {
-        console.log('Preview closed');
-        if (eventLogging) logEvent('close — preview closed');
-      });
-      preview.addEventListener('download', (e) => {
-        console.log('Download:', e.detail);
-        if (eventLogging) logEvent(`download — ${e.detail.item.name}`);
-      });
-
-      const grid = document.getElementById('demo-grid');
-      items.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.tabIndex = 0;
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', `Preview ${item.name}`);
-        card.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-          </svg>
-          <div class="name">${item.name}</div>
-          <div class="type">${item.type}</div>
-        `;
-        card.addEventListener('click', () => openPreview(index));
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openPreview(index);
+    <script>
+      // Hamburger nav toggle
+      (function() {
+        var hamburger = document.getElementById('nav-hamburger');
+        var navLinks = document.getElementById('nav-links');
+        var navOverlay = document.getElementById('nav-overlay');
+        if (hamburger && navLinks && navOverlay) {
+          function toggleNav() {
+            var isOpen = navLinks.classList.toggle('open');
+            hamburger.classList.toggle('open');
+            navOverlay.classList.toggle('open');
+            document.body.style.overflow = isOpen ? 'hidden' : '';
           }
-        });
-        grid.appendChild(card);
-      });
-
-      function openPreview(index) {
-        preview.items = items;
-        preview.initialIndex = index;
-        preview.open = true;
-      }
-
-      document.getElementById('btn-open-first').addEventListener('click', () => openPreview(0));
-
-      document.getElementById('btn-toggle-event').addEventListener('click', (e) => {
-        eventLogging = !eventLogging;
-        e.currentTarget.textContent = eventLogging ? 'Disable Event Logging' : 'Enable Event Logging';
-        logEvent(eventLogging ? 'Event logging enabled' : 'Event logging disabled');
-      });
-
-      // Inline preview controls
-      document.getElementById('btn-open-inline').addEventListener('click', () => {
-        inlinePreview.items = items;
-        inlinePreview.initialIndex = 0;
-        inlinePreview.open = true;
-      });
-
-      document.getElementById('btn-close-inline').addEventListener('click', () => {
-        inlinePreview.open = false;
-      });
-
-      document.getElementById('btn-next-inline').addEventListener('click', () => {
-        inlinePreview.next();
-      });
-
-      document.getElementById('btn-prev-inline').addEventListener('click', () => {
-        inlinePreview.prev();
-      });
-
-      preview.addEventListener('open', () => {
-        if (eventLogging) logEvent('open — lightbox opened');
-      });
-      preview.addEventListener('item-change', (e) => {
-        if (eventLogging) logEvent(`item-change — ${e.detail.currentIndex + 1} / ${items.length}`);
-      });
-      preview.addEventListener('error', (e) => {
-        if (eventLogging) logEvent(`error — ${e.detail.item.name}: ${e.detail.error}`);
-      });
-
-      function logEvent(msg) {
-        const log = document.getElementById('event-log');
-        const entry = document.createElement('div');
-        entry.className = 'entry';
-        const time = new Date().toLocaleTimeString();
-        entry.innerHTML = `<span class="time">[${time}]</span> ${msg}`;
-        log.appendChild(entry);
-        log.scrollTop = log.scrollHeight;
-      }
+          hamburger.addEventListener('click', toggleNav);
+          navOverlay.addEventListener('click', toggleNav);
+        }
+      })();
     </script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

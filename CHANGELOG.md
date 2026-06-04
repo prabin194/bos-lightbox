@@ -8,50 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial release of bos-document-lightbox
-- Framework-agnostic document preview lightbox web component
-- Support for images, PDFs, and other file types
-- Keyboard navigation (arrow keys, escape)
-- Touch gesture support for mobile devices
-- Accessibility features (ARIA attributes, focus trapping)
-- Customizable CSS variables for styling
-- Modal and inline display modes
-- Circular navigation option
-- Download functionality
-- Zoom controls for images
-- TypeScript declarations
-- Comprehensive test suite
+- Video type support — `"video"` items render as `<video controls autoPlay>`
+- `renderItem` prop for custom item content rendering
+- Open/close fade-in animation and fade transition between items
+- Image drag-to-pan when zoomed in (mouse-drag to explore zoomed areas)
+- `test:coverage` script with `@vitest/coverage-v8`
+- Inline mode Escape key and overlay click-to-close support
+- SSR guards — safe for server-side rendering environments
+- Accessibility: `role="tab"`, `aria-selected`, `aria-label` on inline dot indicators
+- Comprehensive test suite expanded from 15 to 44 tests
 
-### Features
-- **Image Preview**: Zoom, pan, and download images with intuitive controls
-- **PDF Preview**: Native PDF viewer integration for document viewing
-- **Touch Gestures**: Swipe navigation on mobile devices
-- **Keyboard Navigation**: Full keyboard support with arrow keys and escape
-- **Accessibility**: ARIA attributes, focus trapping, and semantic HTML
-- **Customization**: CSS variables for easy theming
-- **Framework Agnostic**: Works with React, Vue, Angular, or vanilla JavaScript
-- **Display Modes**: Modal overlay or inline display options
-- **Navigation**: Optional circular navigation through items
-- **Events**: Comprehensive event system for integration
+### Fixed
+- Inline mode now correctly handles `closeOnEscape` (was a no-op before)
+- Inline mode now correctly handles `closeOnOverlay` (was a no-op before)
 
-### Technical
-- Built with Lit 3.x for optimal performance
-- TypeScript support with full type definitions
-- Modern ES module format
-- Tree-shakable and minimal bundle size (27.28 kB)
-- Source maps included for debugging
-- Cross-browser compatibility (Chrome 54+, Firefox 63+, Safari 10.1+, Edge 79+)
-
-### Documentation
-- Comprehensive README with usage examples
-- API documentation with all properties, methods, and events
-- Integration examples for React, Vue, and vanilla JavaScript
-- Styling guide with CSS variables
-- Browser support matrix
-
-## [0.1.0] - 2024-XX-XX
-
-### Added
-- Initial release
-- Core functionality implemented
-- Basic documentation
+### Changed
+- Updated PreviewItem type to include `"video"`
+- README updated with new props, types, and features
+- Replaced deprecated `actions/create-release@v1` with `softprops/action-gh-release@v2`
+- Added `loading="lazy"` to `<img>` elements for performance

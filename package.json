@@ -1,79 +1,66 @@
 {
   "name": "bos-lightbox",
   "version": "0.1.0",
-  "description": "Framework-agnostic document preview lightbox web component. Supports images, PDFs, and other file types with keyboard navigation.",
   "type": "module",
-  "main": "dist/document-preview.js",
-  "module": "dist/document-preview.js",
-  "browser": "dist/document-preview.js",
-  "unpkg": "dist/document-preview.js",
-  "jsdelivr": "dist/document-preview.js",
-  "types": "dist/index.d.ts",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "import": "./dist/document-preview.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && tsc",
-    "preview": "vite preview",
-    "test": "web-test-runner",
-    "test:watch": "web-test-runner --watch",
-    "test:coverage": "web-test-runner --coverage"
-  },
-  "keywords": [
-    "web-component",
-    "lightbox",
-    "document-preview",
-    "lit",
-    "pdf-preview",
-    "image-lightbox",
-    "gallery",
-    "modal",
-    "overlay",
-    "custom-element",
-    "wc",
-    "react",
-    "react-component",
-    "typescript"
-  ],
+  "description": "React-based lightbox component for previewing images, PDFs, and other documents with keyboard navigation, zoom, and touch support.",
   "license": "MIT",
-  "author": {
-    "name": "Prabin Paudel",
-    "email": "prabin.paudel60@gmail.com"
-  },
+  "author": "Prabin Paudel",
   "repository": {
     "type": "git",
     "url": "https://github.com/prabin194/bos-lightbox.git"
   },
+  "homepage": "https://github.com/prabin194/bos-lightbox",
   "bugs": {
     "url": "https://github.com/prabin194/bos-lightbox/issues"
   },
-  "homepage": "https://github.com/prabin194/bos-lightbox#readme",
-  "dependencies": {
-    "lit": "^3.2.0"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.0"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
+  "main": "./dist/bos-lightbox.umd.cjs",
+  "module": "./dist/bos-lightbox.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/bos-lightbox.js",
+      "require": "./dist/bos-lightbox.umd.cjs"
     }
   },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "lightbox",
+    "image-viewer",
+    "document-preview",
+    "react",
+    "gallery",
+    "modal",
+    "pdf-viewer",
+    "component"
+  ],
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
   "devDependencies": {
-    "@web/test-runner": "^0.18.0",
-    "@web/test-runner-playwright": "^0.11.0",
-    "@web/test-runner-mocha": "^0.8.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "@vitest/coverage-v8": "^4.1.8",
+    "jsdom": "^29.1.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
     "typescript": "^5.7.0",
     "vite": "^6.0.0",
-    "lit": "^3.2.0"
+    "vitest": "^4.1.8"
   }
 }
