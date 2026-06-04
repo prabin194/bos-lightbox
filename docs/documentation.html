@@ -3,74 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="bos-lightbox docs — API reference, props, usage guides, code examples.">
+<meta name="description" content="bos-lightbox documentation — full API reference, props table, usage guides, and code examples.">
 <title>Documentation — bos-lightbox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fcfbf9;--surface:#f6f5f1;--surface2:#eae8e3;--border:#e0ddd6;--text:#1a1814;--text2:#5c5953;--text3:#8c8880;--accent:#2d3748;--accent2:#4a5568;--radius:10px;--radius-sm:6px;font-family:Outfit,system-ui,-apple-system,sans-serif;font-size:15.5px;line-height:1.65;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
-.dark{--bg:#141312;--surface:#1c1a18;--surface2:#262320;--border:#33302c;--text:#e8e4de;--text2:#9a9590;--text3:#6e6a65}
+:root{--bg:#ffffff;--surface:#f8f9fa;--surface2:#f1f3f5;--border:#e2e4e8;--text:#0f1117;--text2:#525866;--text3:#868c98;--accent:#7c3aed;--accent2:#a78bfa;--radius:10px;--radius-sm:6px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:15.5px;line-height:1.65;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+.dark{--bg:#0b0d10;--surface:#121418;--surface2:#1a1d24;--border:#262a32;--text:#edf0f5;--text2:#9498a3;--text3:#636873}
 html{scroll-behavior:smooth}body{min-height:100vh;display:flex;flex-direction:column}
 
-header{position:sticky;top:0;z-index:100;background:rgba(252,251,249,0.85);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--border)}
-.dark header{background:rgba(20,19,18,0.85)}
+/* Header */
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.8);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--border)}
+.dark header{background:rgba(11,13,16,0.8)}
 .header-inner{max-width:1100px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:56px;gap:6px}
-.logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;color:var(--text);text-decoration:none;margin-right:auto;letter-spacing:-0.01em}
-.logo svg{width:22px;height:22px;flex-shrink:0;stroke:#2d3748}.dark .logo svg{stroke:#a08972}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;color:var(--text);text-decoration:none;margin-right:auto;letter-spacing:-0.02em}
+.logo svg{width:22px;height:22px;flex-shrink:0}
 nav{display:flex;align-items:center;gap:2px}
-nav a{padding:6px 14px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text2);text-decoration:none;transition:color 0.2s,background 0.2s}
+nav a{padding:6px 14px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--text2);text-decoration:none;transition:color 0.15s,background 0.15s}
 nav a:hover{color:var(--text);background:var(--surface2)}
-nav a.active{color:var(--text);background:var(--surface2);font-weight:600}
+nav a.active{color:var(--accent);background:rgba(124,58,237,0.08)}
+.dark nav a.active{background:rgba(124,58,237,0.15)}
 .nav-btns{display:flex;align-items:center;gap:4px;margin-left:8px}
-.nav-btn{width:34px;height:34px;border:none;border-radius:8px;background:transparent;color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:color 0.2s,background 0.2s}
+.nav-btn{width:34px;height:34px;border:none;border-radius:8px;background:transparent;color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:color 0.15s,background 0.15s}
 .nav-btn:hover{color:var(--text);background:var(--surface2)}
 
+/* Main content */
 main{flex:1;display:flex;justify-content:center;padding:48px 24px 80px}
 .content{width:100%;max-width:720px;min-width:0}
-.content h1{font-size:2rem;font-weight:700;margin-bottom:8px;line-height:1.15;color:var(--text)}
-.content h2{font-size:1.2rem;font-weight:600;margin:44px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border);scroll-margin-top:72px;color:var(--text)}
-.content h3{font-size:0.95rem;font-weight:600;margin:28px 0 8px;scroll-margin-top:72px;color:var(--text)}
+.content h1{font-size:2rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:8px;line-height:1.2}
+.content h2{font-size:1.25rem;font-weight:700;margin:44px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border);scroll-margin-top:72px;letter-spacing:-0.01em}
+.content h3{font-size:1rem;font-weight:600;margin:28px 0 8px;scroll-margin-top:72px}
 .content p,.content li{font-size:14px;color:var(--text2);line-height:1.75}
 .content p{margin-bottom:14px}
 .content ul,.content ol{padding-left:20px;margin-bottom:16px}
 .content li{margin-bottom:4px}
 .content strong{color:var(--text);font-weight:600}
-.content a{color:var(--text);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--border)}
-.content a:hover{text-decoration-color:var(--text2)}
+.content a{color:var(--accent);text-decoration:none}
+.content a:hover{text-decoration:underline}
 .content code{background:var(--surface2);padding:2px 7px;border-radius:4px;font-family:JetBrains Mono,monospace;font-size:12.5px;color:var(--text)}
-.content kbd{padding:1px 6px;border-radius:4px;border:1px solid var(--border);font-family:inherit;font-size:12px;background:var(--surface);color:var(--text2)}
 
-.content pre{background:var(--surface);border-radius:var(--radius);padding:18px 20px;margin:14px 0 22px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:13px;line-height:1.55;color:var(--text);border:1px solid var(--border)}
+/* Code blocks */
+.content pre{background:var(--surface2);border-radius:var(--radius);padding:18px 20px;margin:14px 0 22px;overflow-x:auto;font-family:JetBrains Mono,monospace;font-size:13px;line-height:1.55;color:var(--text);border:1px solid var(--border)}
 .content pre .comment{color:var(--text3)}
 .content pre .keyword{color:var(--accent)}
-.content pre .string{color:#7a6b5a}.dark .content pre .string{color:#baa99a}
-.content pre .function{color:#a08972}.content pre .tag{color:var(--accent)}
-.content pre .number{color:var(--accent)}
+.content pre .string{color:#059669}.dark .content pre .string{color:#34d399}
+.content pre .function{color:#d97706}.dark .content pre .function{color:#fbbf24}
+.content pre .tag{color:var(--accent)}
+.content pre .builtin{color:#0891b2}.dark .content pre .builtin{color:#22d3ee}
+.content pre .number{color:#7c3aed}
+.content pre .operator{color:var(--text2)}
 
+/* Tables */
 .content table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px}
 .content th,.content td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
-.content th{font-weight:600;color:var(--text);background:var(--surface);font-size:11.5px;text-transform:uppercase;letter-spacing:0.06em}
+.content th{font-weight:600;color:var(--text);background:var(--surface);font-size:12px;text-transform:uppercase;letter-spacing:0.04em}
 .content td{color:var(--text2)}
-.content td:first-child{font-weight:500;color:var(--text);font-family:JetBrains Mono,monospace;font-size:12px;white-space:nowrap}
+.content td:first-child{font-weight:500;color:var(--text);font-family:JetBrains Mono,monospace;font-size:12.5px;white-space:nowrap}
 
-.tag-pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:500;margin-left:4px;border:1px solid}
-.tag-required{background:#fef2f2;color:#991b1b;border-color:#fecaca}.dark .tag-required{background:rgba(220,38,38,0.08);color:#f87171;border-color:rgba(220,38,38,0.2)}
-.tag-optional{background:rgba(5,150,105,0.06);color:#065f46;border-color:rgba(5,150,105,0.15)}.dark .tag-optional{background:rgba(52,211,153,0.06);color:#6ee7b7;border-color:rgba(52,211,153,0.15)}
-.tag-event{background:rgba(245,166,35,0.06);color:#92400e;border-color:rgba(245,166,35,0.15)}.dark .tag-event{background:rgba(251,191,36,0.06);color:#fbbf24;border-color:rgba(251,191,36,0.15)}
+/* Tag pills */
+.tag-pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:600;margin-left:4px}
+.tag-required{background:#fef2f2;color:#dc2626}.dark .tag-required{background:rgba(220,38,38,0.12);color:#f87171}
+.tag-optional{background:rgba(5,150,105,0.08);color:#059669}.dark .tag-optional{background:rgba(52,211,153,0.1);color:#34d399}
+.tag-event{background:rgba(245,166,35,0.08);color:#d97706}.dark .tag-event{background:rgba(251,191,36,0.1);color:#fbbf24}
 
-.callout{padding:14px 18px;border-radius:var(--radius);margin:16px 0;font-size:13.5px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
-.callout strong{color:var(--text)}
+/* Callout */
+.callout{padding:14px 18px;border-radius:var(--radius);margin:16px 0;font-size:13.5px;border-left:3px solid var(--accent);background:rgba(124,58,237,0.04);color:var(--text2)}
+.dark .callout{background:rgba(124,58,237,0.06)}
+.callout strong{color:var(--accent)}
+
+/* Interface box */
 .interface-box{padding:18px 20px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);margin:12px 0 20px;font-family:JetBrains Mono,monospace;font-size:13px;line-height:1.6;color:var(--text)}
 .interface-box .comment{color:var(--text3)}
 .interface-box .keyword{color:var(--accent)}
-.interface-box .string{color:#7a6b5a}.dark .interface-box .string{color:#baa99a}
-.interface-box .function{color:#a08972}.dark .interface-box .function{color:#c4b4a5}
+.interface-box .string{color:#059669}.dark .interface-box .string{color:#34d399}
+.interface-box .function{color:#d97706}.dark .interface-box .function{color:#fbbf24}
+.interface-box .tag{color:var(--accent)}
+.interface-box .number{color:#7c3aed}
 
+/* Footer */
 footer{text-align:center;padding:28px 24px;border-top:1px solid var(--border);font-size:13px;color:var(--text3)}
-footer a{color:var(--text);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--border)}
+footer a{color:var(--accent);text-decoration:none}
 
+/* Responsive */
 @media(max-width:768px){
   nav{gap:0}
   nav a{padding:5px 10px;font-size:12.5px}
@@ -88,7 +104,7 @@ footer a{color:var(--text);text-decoration:underline;text-underline-offset:2px;t
 <body>
 <header>
 <div class="header-inner">
-<a href="./" class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>bos-lightbox</a>
+<a href="./" class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="%237c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>bos-lightbox</a>
 <nav>
 <a href="./">Home</a>
 <a href="documentation.html" class="active">Docs</a>
@@ -104,14 +120,14 @@ footer a{color:var(--text);text-decoration:underline;text-underline-offset:2px;t
 <main>
 <div class="content">
 <h1>Documentation</h1>
-<p>API reference and usage guide for bos-lightbox — a React component for previewing images, PDFs, videos, and other files.</p>
+<p>Complete API reference and usage guide for bos-lightbox — a lightweight, accessible React component for previewing images, PDFs, videos, and documents.</p>
 
 <h2 id="installation">Installation</h2>
 <pre><span class="keyword">$</span> npm install bos-lightbox</pre>
-<p>Requires React 16.8+. No other runtime dependencies.</p>
+<p>Requires React 16.8+ (Hooks-compatible). No other runtime dependencies.</p>
 
 <h2 id="basic-usage">Basic usage</h2>
-<p><code>BosLightbox</code> is a controlled component — you manage the <code>open</code> state yourself and pass <code>onClose</code> to handle closing.</p>
+<p>The <code>BosLightbox</code> component is controlled — you manage the <code>open</code> state via a parent React state variable, and pass <code>onClose</code> to update it.</p>
 <pre><span class="keyword">import</span> { useState } <span class="keyword">from</span> <span class="string">"react"</span>
 <span class="keyword">import</span> { <span class="function">BosLightbox</span> } <span class="keyword">from</span> <span class="string">"bos-lightbox"</span>
 
@@ -131,60 +147,68 @@ footer a{color:var(--text);text-decoration:underline;text-underline-offset:2px;t
         items={items}
         open={open}
         initialIndex={0}
-        onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)},
+        onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)}
       <span class="tag">/&gt;</span>
     <span class="tag">&lt;/&gt;</span>
   )
 }</pre>
 
 <h2 id="live-demo">Live demo</h2>
-<p>Click any card below to open the lightbox. Use arrow keys to navigate, <kbd>Esc</kbd> to close.</p>
+<p>Click any card below to open the lightbox and try it live. Navigate with arrow keys, zoom images, and close with <kbd>Esc</kbd>.</p>
 
 <div id="demo-root"></div>
-<div class="demo-error" id="demo-error"><p>⚠️ Demo could not load. JavaScript is required.</p></div>
+
+<div class="demo-error" id="demo-error">
+  <p>⚠️ Demo could not load. Make sure JavaScript is enabled.</p>
+</div>
+
 <noscript><div class="demo-error"><p>⚠️ JavaScript is required to view the live demo.</p></div></noscript>
 
 <style>
 #demo-root{min-height:200px;margin:16px 0 24px}
-.demo-error{display:none;padding:14px 18px;border-radius:var(--radius);background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.12);color:#991b1b;font-size:13.5px;margin:16px 0}
+.demo-error{display:none;padding:14px 18px;border-radius:var(--radius);background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.15);color:#dc2626;font-size:13.5px;margin:16px 0}
 .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.demo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color 0.2s;position:relative}
-.demo-card:hover{border-color:var(--text3)}
+.demo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color 0.15s,transform 0.15s;position:relative}
+.demo-card:hover{transform:translateY(-2px);border-color:var(--accent)}
 .demo-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--surface2)}
 .demo-card-fallback{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--surface2);color:var(--text3)}
 .demo-card-label{padding:8px 12px;font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.demo-type-badge{position:absolute;top:8px;right:8px;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px;background:rgba(26,24,20,0.65);color:#f5f4f1}
-.dark .demo-type-badge{background:rgba(20,19,18,0.8);color:#d4d0ca}
+.demo-type-badge{position:absolute;top:8px;right:8px;padding:2px 7px;border-radius:999px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px;background:rgba(0,0,0,0.55);color:#fff;backdrop-filter:blur(4px)}
 .demo-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px 24px;color:var(--text3);font-size:14px}
-.demo-loading .spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:demoSpin 0.6s linear infinite}
+.demo-loading .spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:demoSpin 0.6s linear infinite}
 @keyframes demoSpin{to{transform:rotate(360deg)}}
-@media(max-width:480px){.demo-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){
+  .demo-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 
 <h2 id="types">Type definitions</h2>
 
 <h3>PreviewItem</h3>
-<p>Each item in the lightbox follows this shape:</p>
+<p>The core data type describing each item in the lightbox.</p>
 <div class="interface-box">
+<span class="comment">// Represents a single previewable item</span><br>
 {<br>
-&nbsp;&nbsp;url: <span class="keyword">string</span>    <span class="comment">// path or URL to the file</span><br>
-&nbsp;&nbsp;type: <span class="string">"image"</span> | <span class="string">"pdf"</span> | <span class="string">"video"</span> | <span class="string">"other"</span><br>
-&nbsp;&nbsp;name: <span class="keyword">string</span>   <span class="comment">// shown in the header</span><br>
+&nbsp;&nbsp;url: <span class="keyword">string</span>    <span class="comment">// URL or path to the file</span><br>
+&nbsp;&nbsp;type: <span class="string">"image"</span> | <span class="string">"pdf"</span> | <span class="string">"video"</span> | <span class="string">"other"</span>  <span class="comment">// Determines the renderer</span><br>
+&nbsp;&nbsp;name: <span class="keyword">string</span>   <span class="comment">// Display name / filename</span><br>
 }
 </div>
+<p><strong>Item types:</strong></p>
 <ul>
-<li><code>"image"</code> — Renders with <code>&lt;img&gt;</code>, includes zoom and drag-to-pan.</li>
-<li><code>"pdf"</code> — Renders in an <code>&lt;iframe&gt;</code>. Falls back to download on error.</li>
-<li><code>"video"</code> — Native <code>&lt;video&gt;</code> with controls and autoplay.</li>
-<li><code>"other"</code> — Shows a file icon and name. Encourages download.</li>
+<li><code>"image"</code> — Renders with native <code>&lt;img&gt;</code>, loading spinner, zoom, and drag-to-pan.</li>
+<li><code>"pdf"</code> — Renders in an <code>&lt;iframe&gt;</code>. Shows error fallback on failure.</li>
+<li><code>"video"</code> — Renders a native <code>&lt;video&gt;</code> element with controls and autoplay.</li>
+<li><code>"other"</code> — Shows a generic file icon with name. Encourages download.</li>
 </ul>
 
 <h3>BosLightboxRef</h3>
-<p>Methods exposed via the <code>ref</code> prop:</p>
+<p>Methods available via the <code>ref</code> prop for imperative control.</p>
 <div class="interface-box">
+<span class="comment">// Imperative control methods</span><br>
 {<br>
-&nbsp;&nbsp;openAt(index): <span class="keyword">void</span><br>
-&nbsp;&nbsp;goTo(index): <span class="keyword">void</span><br>
+&nbsp;&nbsp;openAt(index: <span class="keyword">number</span>): <span class="keyword">void</span><br>
+&nbsp;&nbsp;goTo(index: <span class="keyword">number</span>): <span class="keyword">void</span><br>
 &nbsp;&nbsp;next(): <span class="keyword">void</span><br>
 &nbsp;&nbsp;prev(): <span class="keyword">void</span><br>
 &nbsp;&nbsp;close(): <span class="keyword">void</span><br>
@@ -201,36 +225,37 @@ footer a{color:var(--text);text-decoration:underline;text-underline-offset:2px;t
 <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>items <span class="tag-pill tag-required">required</span></td><td><code>PreviewItem[]</code></td><td>—</td><td>Items to display.</td></tr>
-<tr><td>open <span class="tag-pill tag-required">required</span></td><td><code>boolean</code></td><td>—</td><td>Controls visibility.</td></tr>
-<tr><td>initialIndex <span class="tag-pill tag-optional">optional</span></td><td><code>number</code></td><td><code>0</code></td><td>Item to show when opened.</td></tr>
-<tr><td>loop <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>false</code></td><td>Wrap from last to first.</td></tr>
-<tr><td>closeOnOverlay <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when clicking the backdrop.</td></tr>
-<tr><td>closeOnEscape <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>true</code></td><td>Close on Escape key.</td></tr>
-<tr><td>downloadable <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>true</code></td><td>Show the download button.</td></tr>
-<tr><td>displayMode <span class="tag-pill tag-optional">optional</span></td><td><code>"modal" | "inline"</code></td><td><code>"modal"</code></td><td>Modal uses native <code>&lt;dialog&gt;</code>. Inline renders as overlay.</td></tr>
-<tr><td>slideshow <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>false</code></td><td>Auto-advance through items.</td></tr>
-<tr><td>slideshowInterval <span class="tag-pill tag-optional">optional</span></td><td><code>number</code></td><td><code>3000</code></td><td>Interval in ms between advances.</td></tr>
-<tr><td>thumbnails <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>false</code></td><td>Show a bottom thumbnail strip.</td></tr>
-<tr><td>renderItem <span class="tag-pill tag-optional">optional</span></td><td><code>(item) => ReactNode</code></td><td>—</td><td>Override item rendering.</td></tr>
-<tr><td>className <span class="tag-pill tag-optional">optional</span></td><td><code>string</code></td><td>—</td><td>CSS class for the root element.</td></tr>
-<tr><td>style <span class="tag-pill tag-optional">optional</span></td><td><code>React.CSSProperties</code></td><td>—</td><td>Inline styles for the root.</td></tr>
-<tr><td>onOpen <span class="tag-pill tag-event">event</span></td><td><code>() => void</code></td><td>—</td><td>Fires when the lightbox opens.</td></tr>
-<tr><td>onClose <span class="tag-pill tag-event">event</span></td><td><code>() => void</code></td><td>—</td><td>Fires when the lightbox closes.</td></tr>
-<tr><td>onItemChange <span class="tag-pill tag-event">event</span></td><td><code>(detail) => void</code></td><td>—</td><td>Fires on item navigation.</td></tr>
-<tr><td>onDownload <span class="tag-pill tag-event">event</span></td><td><code>(detail) => void</code></td><td>—</td><td>Fires on download click.</td></tr>
-<tr><td>onError <span class="tag-pill tag-event">event</span></td><td><code>(detail) => void</code></td><td>—</td><td>Fires on load errors.</td></tr>
+<tr><td>items <span class="tag-pill tag-required">required</span></td><td><code>PreviewItem[]</code></td><td>—</td><td>Array of items to display in the lightbox.</td></tr>
+<tr><td>open <span class="tag-pill tag-required">required</span></td><td><code>boolean</code></td><td>—</td><td>Controlled open/closed state. Parent manages this.</td></tr>
+<tr><td>initialIndex <span class="tag-pill tag-optional">optional</span></td><td><code>number</code></td><td><code>0</code></td><td>Index of the item to show when opened.</td></tr>
+<tr><td>loop <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>false</code></td><td>When <code>true</code>, navigation wraps around from last to first.</td></tr>
+<tr><td>closeOnOverlay <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when clicking outside the content area (on the backdrop).</td></tr>
+<tr><td>closeOnEscape <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when pressing Escape key.</td></tr>
+<tr><td>downloadable <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>true</code></td><td>Show or hide the download button in the header.</td></tr>
+<tr><td>displayMode <span class="tag-pill tag-optional">optional</span></td><td><code>"modal" | "inline"</code></td><td><code>"modal"</code></td><td>Modal uses native <code>&lt;dialog&gt;</code>. Inline renders as positioned overlay.</td></tr>
+<tr><td>slideshow <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>false</code></td><td>Enable auto-playing slideshow mode.</td></tr>
+<tr><td>slideshowInterval <span class="tag-pill tag-optional">optional</span></td><td><code>number</code></td><td><code>3000</code></td><td>Interval in ms between slideshow advances.</td></tr>
+<tr><td>thumbnails <span class="tag-pill tag-optional">optional</span></td><td><code>boolean</code></td><td><code>false</code></td><td>Show a bottom thumbnail strip for visual navigation.</td></tr>
+<tr><td>renderItem <span class="tag-pill tag-optional">optional</span></td><td><code>(item) => ReactNode</code></td><td>—</td><td>Custom render function for item content. Overrides built-in type rendering.</td></tr>
+<tr><td>className <span class="tag-pill tag-optional">optional</span></td><td><code>string</code></td><td>—</td><td>Optional CSS class applied to the root element.</td></tr>
+<tr><td>style <span class="tag-pill tag-optional">optional</span></td><td><code>React.CSSProperties</code></td><td>—</td><td>Optional inline styles merged with default styles.</td></tr>
+<tr><td>onOpen <span class="tag-pill tag-event">event</span></td><td><code>() => void</code></td><td>—</td><td>Called when the lightbox opens.</td></tr>
+<tr><td>onClose <span class="tag-pill tag-event">event</span></td><td><code>() => void</code></td><td>—</td><td>Called when the lightbox should close.</td></tr>
+<tr><td>onItemChange <span class="tag-pill tag-event">event</span></td><td><code>(detail) => void</code></td><td>—</td><td>Called when the active item index changes.</td></tr>
+<tr><td>onDownload <span class="tag-pill tag-event">event</span></td><td><code>(detail) => void</code></td><td>—</td><td>Called when the download button is clicked.</td></tr>
+<tr><td>onError <span class="tag-pill tag-event">event</span></td><td><code>(detail) => void</code></td><td>—</td><td>Called when an image or PDF fails to load.</td></tr>
 </tbody>
 </table>
 
 <h2 id="ref-methods">Ref / imperative methods</h2>
-<p>Use a <code>ref</code> to control the lightbox from a parent component.</p>
+<p>Use a <code>ref</code> to programmatically control the lightbox from a parent component.</p>
 <pre><span class="keyword">import</span> { useRef } <span class="keyword">from</span> <span class="string">"react"</span>
 <span class="keyword">import</span> { <span class="function">BosLightbox</span>, <span class="keyword">type</span> <span class="function">BosLightboxRef</span> } <span class="keyword">from</span> <span class="string">"bos-lightbox"</span>
 
 <span class="keyword">const</span> ref = <span class="function">useRef</span><span class="tag">&lt;</span>BosLightboxRef<span class="tag">&gt;</span>(<span class="keyword">null</span>)
 <span class="tag">&lt;BosLightbox</span> ref={ref} items={items} open={open} onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)} <span class="tag">/&gt;</span>
 
+<span class="comment">// Usage</span>
 ref.<span class="function">current</span>?.<span class="function">openAt</span>(2)
 ref.<span class="function">current</span>?.<span class="function">next</span>()
 ref.<span class="function">current</span>?.<span class="function">close</span>()</pre>
@@ -240,20 +265,20 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>openAt(index)</td><td><code>void</code></td><td>Opens the lightbox at a specific index.</td></tr>
-<tr><td>goTo(index)</td><td><code>void</code></td><td>Navigate to a specific index.</td></tr>
-<tr><td>next()</td><td><code>void</code></td><td>Go to the next item.</td></tr>
-<tr><td>prev()</td><td><code>void</code></td><td>Go to the previous item.</td></tr>
-<tr><td>close()</td><td><code>void</code></td><td>Triggers <code>onClose</code>.</td></tr>
-<tr><td>getCurrentIndex()</td><td><code>number</code></td><td>Current item index.</td></tr>
-<tr><td>getCurrentItem()</td><td><code>PreviewItem | undefined</code></td><td>Current item object.</td></tr>
-<tr><td>toggleSlideshow()</td><td><code>void</code></td><td>Toggle play/pause.</td></tr>
-<tr><td>isSlideshowActive()</td><td><code>boolean</code></td><td>Slideshow status.</td></tr>
+<tr><td>openAt(index)</td><td><code>void</code></td><td>Opens the lightbox at the specified item index. Clamps to bounds.</td></tr>
+<tr><td>goTo(index)</td><td><code>void</code></td><td>Navigate to a specific item index.</td></tr>
+<tr><td>next()</td><td><code>void</code></td><td>Navigate to the next item. Respects <code>loop</code> setting.</td></tr>
+<tr><td>prev()</td><td><code>void</code></td><td>Navigate to the previous item. Respects <code>loop</code> setting.</td></tr>
+<tr><td>close()</td><td><code>void</code></td><td>Triggers <code>onClose</code> to close the lightbox.</td></tr>
+<tr><td>getCurrentIndex()</td><td><code>number</code></td><td>Returns the index of the currently displayed item.</td></tr>
+<tr><td>getCurrentItem()</td><td><code>PreviewItem | undefined</code></td><td>Returns the currently displayed item object.</td></tr>
+<tr><td>toggleSlideshow()</td><td><code>void</code></td><td>Toggles slideshow play/pause.</td></tr>
+<tr><td>isSlideshowActive()</td><td><code>boolean</code></td><td>Returns whether slideshow is currently active.</td></tr>
 </tbody>
 </table>
 
 <h2 id="event-callbacks">Event callbacks</h2>
-<p>The component fires several callbacks during its lifecycle.</p>
+<p>The component fires several callbacks during its lifecycle. Use them for analytics, logging, or side effects.</p>
 <pre><span class="tag">&lt;BosLightbox</span>
   items={items}
   open={open}
@@ -273,12 +298,12 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <h2 id="display-modes">Display modes</h2>
 
 <h3>Modal mode (default)</h3>
-<p>Uses the native <code>&lt;dialog&gt;</code> element with <code>showModal()</code>:</p>
+<p>Uses the native <code>&lt;dialog&gt;</code> element with <code>showModal()</code>. This provides:</p>
 <ul>
 <li>Automatic focus trapping</li>
 <li>Built-in Escape key handling</li>
-<li><code>::backdrop</code> with blur effect</li>
-<li>Top-layer rendering (no z-index issues)</li>
+<li><code>::backdrop</code> pseudo-element with blur effect</li>
+<li>Proper stacking context (top-layer rendering)</li>
 </ul>
 <pre><span class="tag">&lt;BosLightbox</span>
   items={items}
@@ -288,17 +313,17 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <span class="tag">/&gt;</span></pre>
 
 <h3>Inline mode</h3>
-<p>Renders as a fixed-position overlay. Header navigation and dot indicators replace floating arrows.</p>
+<p>Renders the lightbox as a fixed-position overlay within the page. Includes header navigation and dot indicators. Useful for embedded galleries or custom layouts.</p>
 <pre><span class="tag">&lt;BosLightbox</span>
   items={items}
   open={open}
   displayMode={<span class="string">"inline"</span>}
-  onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)},
+  onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)}
 <span class="tag">/&gt;</span></pre>
-<div class="callout"><strong>Note:</strong> In inline mode, nav buttons live in the header bar. Use <code>style</code> and <code>className</code> for custom positioning.</div>
+<div class="callout"><strong>Tip:</strong> In inline mode, navigation buttons appear in the header bar rather than as floating side arrows. Use <code>style</code> and <code>className</code> for custom positioning.</div>
 
 <h2 id="slideshow">Slideshow mode</h2>
-<p>Enable auto-play with the <code>slideshow</code> prop. The lightbox advances at a regular interval and pauses on manual navigation.</p>
+<p>Enable auto-playing slideshow with the <code>slideshow</code> prop. The lightbox auto-advances through items at the configured interval and pauses on manual navigation.</p>
 <pre><span class="tag">&lt;BosLightbox</span>
   items={items}
   open={open}
@@ -307,20 +332,20 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
   loop
   onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)}
 <span class="tag">/&gt;</span></pre>
-<div class="callout"><strong>Note:</strong> Without <code>loop</code>, the slideshow stops at the last item.</div>
+<div class="callout"><strong>Tip:</strong> When <code>loop</code> is <code>false</code>, the slideshow stops at the last item. Enable <code>loop</code> for continuous playback.</div>
 
 <h2 id="thumbnail-strip">Thumbnail strip</h2>
-<p>Add a bottom row of thumbnails for visual navigation between items.</p>
+<p>Show a bottom row of thumbnails for quick visual navigation between items.</p>
 <pre><span class="tag">&lt;BosLightbox</span>
   items={items}
   open={open}
   thumbnails
   onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)}
 <span class="tag">/&gt;</span></pre>
-<div class="callout"><strong>Note:</strong> Non-image types show a type icon in the thumbnail.</div>
+<div class="callout"><strong>Tip:</strong> For PDF, video, and other types, the thumbnail shows a type icon instead of an image preview.</div>
 
 <h2 id="custom-rendering">Custom rendering</h2>
-<p>Use <code>renderItem</code> to override how items are rendered.</p>
+<p>Use the <code>renderItem</code> prop to take full control over how each item is rendered.</p>
 <pre><span class="tag">&lt;BosLightbox</span>
   items={items}
   open={open}
@@ -329,52 +354,54 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
     <span class="keyword">if</span> (item.type === <span class="string">"image"</span>) {
       <span class="keyword">return</span> <span class="tag">&lt;</span><span class="function">CustomImageViewer</span> url={item.url} <span class="tag">/&gt;</span>
     }
-    <span class="keyword">return</span> <span class="keyword">null</span>
+    <span class="keyword">return</span> <span class="keyword">null</span> <span class="comment">// Use null to render nothing for this item</span>
   }}
 <span class="tag">/&gt;</span></pre>
 
 <h2 id="keyboard-nav">Keyboard navigation</h2>
+<p>Keyboard shortcuts are active when the lightbox is open.</p>
 <table>
 <thead>
 <tr><th>Key</th><th>Action</th></tr>
 </thead>
 <tbody>
-<tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Previous / next item</td></tr>
-<tr><td><kbd>Esc</kbd></td><td>Close lightbox</td></tr>
+<tr><td><code>←</code> / <code>→</code></td><td>Navigate to previous / next item</td></tr>
+<tr><td><code>Esc</code></td><td>Close the lightbox (configurable via <code>closeOnEscape</code>)</td></tr>
 </tbody>
 </table>
 
 <h2 id="zoom-controls">Zoom controls</h2>
-<p>Available for <code>"image"</code> items. Controls appear in the bottom-right corner.</p>
+<p>Available for <code>"image"</code> items. Controls appear in the bottom-right corner of the content area.</p>
 <table>
 <thead>
 <tr><th>Control</th><th>Behavior</th></tr>
 </thead>
 <tbody>
-<tr><td>Zoom in (+)</td><td>+0.25x (max 5×)</td></tr>
-<tr><td>Zoom out (−)</td><td>−0.25x (min 0.25×)</td></tr>
-<tr><td>Reset</td><td>Back to 1× (only visible when zoomed)</td></tr>
+<tr><td>Zoom in (+)</td><td>Increases scale by 0.25x (max 5x)</td></tr>
+<tr><td>Zoom out (−)</td><td>Decreases scale by 0.25x (min 0.25x)</td></tr>
+<tr><td>Reset</td><td>Returns to 1x (only shown when zoomed)</td></tr>
 </tbody>
 </table>
-<p>When zoomed in, click and drag to pan.</p>
+<p>When zoomed in, you can click and drag to pan around the image.</p>
 
 <h2 id="download">Download</h2>
-<p>The download button runs this flow:</p>
+<p>The download button in the header triggers the following flow:</p>
 <ol>
-<li>Fires <code>onDownload</code></li>
-<li>Tries <code>fetch</code> with <code>mode: "cors"</code> to get a Blob</li>
-<li>Creates a download link via <code>URL.createObjectURL</code></li>
-<li>Falls back to <code>&lt;a download&gt;</code> if fetch fails</li>
+<li>Calls <code>onDownload</code> callback</li>
+<li>Attempts <code>fetch</code> with <code>mode: "cors"</code> to get the file as a Blob</li>
+<li>Creates a temporary download link via <code>URL.createObjectURL</code></li>
+<li>Falls back to direct <code>&lt;a download&gt;</code> if the fetch fails</li>
 </ol>
-<p>Set <code>downloadable={false}</code> to hide the button.</p>
+<p>Disable the download button entirely with <code>downloadable={false}</code>.</p>
 
 <h2 id="touch-swipe">Touch &amp; swipe</h2>
+<p>Touch gestures work on mobile and touch-enabled devices.</p>
 <p>A swipe is registered when:</p>
 <ul>
 <li>Horizontal distance exceeds 50px</li>
-<li>Horizontal distance exceeds vertical distance</li>
+<li>Horizontal distance is greater than vertical distance (avoids triggering on scroll)</li>
 </ul>
-<p>Swipe right → previous. Swipe left → next.</p>
+<p>Swipe right → previous item. Swipe left → next item.</p>
 
 <h2 id="examples">Examples</h2>
 
@@ -385,13 +412,17 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <span class="keyword">const</span> images = [
   { url: <span class="string">"https://picsum.photos/id/10/800/600"</span>, type: <span class="string">"image"</span>, name: <span class="string">"Forest path"</span> },
   { url: <span class="string">"https://picsum.photos/id/20/800/600"</span>, type: <span class="string">"image"</span>, name: <span class="string">"Mountain lake"</span> },
+  { url: <span class="string">"https://picsum.photos/id/30/800/600"</span>, type: <span class="string">"image"</span>, name: <span class="string">"City skyline"</span> },
 ]
 
-<span class="keyword">function</span> <span class="function">Gallery</span>() {
+<span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="function">Gallery</span>() {
   <span class="keyword">const</span> [open, setOpen] = <span class="function">useState</span>(<span class="keyword">false</span>)
+
   <span class="keyword">return</span> (
     <span class="tag">&lt;&gt;</span>
-      <span class="tag">&lt;button</span> onClick={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">true</span>)}<span class="tag">&gt;</span>View gallery<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;button</span> onClick={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">true</span>)}<span class="tag">&gt;</span>
+        View gallery
+      <span class="tag">&lt;/button&gt;</span>
       <span class="tag">&lt;BosLightbox</span>
         items={images}
         open={open}
@@ -406,7 +437,7 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <pre><span class="keyword">const</span> items = [
   { url: <span class="string">"/slides/intro.png"</span>,    type: <span class="string">"image"</span>, name: <span class="string">"Slide 1"</span> },
   { url: <span class="string">"/slides/report.pdf"</span>,   type: <span class="string">"pdf"</span>,    name: <span class="string">"Report"</span> },
-  { url: <span class="string">"/slides/demo.mp4"</span>,     type: <span class="string">"video"</span>,  name: <span class="string">"Demo"</span> },
+  { url: <span class="string">"/slides/demo.mp4"</span>,     type: <span class="string">"video"</span>,  name: <span class="string">"Demo video"</span> },
 ]
 
 <span class="tag">&lt;BosLightbox</span>
@@ -423,9 +454,18 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <span class="keyword">function</span> <span class="function">ControlledPreview</span>() {
   <span class="keyword">const</span> ref = <span class="function">useRef</span><span class="tag">&lt;</span>BosLightboxRef<span class="tag">&gt;</span>(<span class="keyword">null</span>)
   <span class="keyword">const</span> [open, setOpen] = <span class="function">useState</span>(<span class="keyword">false</span>)
+
   <span class="keyword">return</span> (
     <span class="tag">&lt;&gt;</span>
-      <span class="tag">&lt;button</span> onClick={<span class="function">()</span> <span class="keyword">=&gt;</span> ref.<span class="function">current</span>?.<span class="function">openAt</span>(0)}<span class="tag">&gt;</span>Open first<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;button</span> onClick={<span class="function">()</span> <span class="keyword">=&gt;</span> ref.<span class="function">current</span>?.<span class="function">openAt</span>(0)}<span class="tag">&gt;</span>
+        Open first
+      <span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;button</span> onClick={<span class="function">()</span> <span class="keyword">=&gt;</span> {
+        <span class="keyword">const</span> idx = ref.<span class="function">current</span>?.<span class="function">getCurrentIndex</span>() ?? -1
+        <span class="function">console</span>.<span class="function">log</span>(<span class="string">"Current index:"</span>, idx)
+      }}<span class="tag">&gt;</span>
+        Log index
+      <span class="tag">&lt;/button&gt;</span>
       <span class="tag">&lt;BosLightbox</span>
         ref={ref}
         items={items}
@@ -441,9 +481,9 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
   items={items}
   open={open}
   onClose={<span class="function">()</span> <span class="keyword">=&gt;</span> <span class="function">setOpen</span>(<span class="keyword">false</span>)}
-  closeOnOverlay={<span class="keyword">false</span>}
-  closeOnEscape={<span class="keyword">false</span>}
-  downloadable={<span class="keyword">false</span>}
+  closeOnOverlay={<span class="keyword">false</span>}   <span class="comment">// Must use close button</span>
+  closeOnEscape={<span class="keyword">false</span>}    <span class="comment">// Must use close button</span>
+  downloadable={<span class="keyword">false</span>}       <span class="comment">// Hide download button</span>
 <span class="tag">/&gt;</span></pre>
 </div>
 </main>
@@ -451,17 +491,102 @@ ref.<span class="function">current</span>?.<span class="function">close</span>()
 <p>bos-lightbox &mdash; MIT &copy; Prabin Paudel &bull; <a href="https://github.com/prabin194/bos-lightbox">GitHub</a></p>
 </footer>
 <script>
+// Theme toggle
 (function(){var b=document.getElementById('theme-btn'),d=document.documentElement;if(b){var t=localStorage.getItem('theme');if(t==='dark'){d.classList.add('dark');b.textContent='☀️'}b.addEventListener('click',function(){d.classList.toggle('dark');var isDark=d.classList.contains('dark');localStorage.setItem('theme',isDark?'dark':'light');b.textContent=isDark?'☀️':'🌙'})}})();
 </script>
+
 <script>
-(function(){var root=document.getElementById('demo-root'),err=document.getElementById('demo-error');if(!root)return;
-root.innerHTML='<div class="demo-loading"><div class="spinner"></div><span>Loading demo...</span></div>';
-function load(s,c){var e=document.createElement('script');e.src=s;e.onload=c;e.onerror=c;document.body.appendChild(e)}
-load('https://unpkg.com/react@18/umd/react.production.min.js',function(){load('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',function(){load('bos-lightbox.umd.js',function(){try{init()}catch(e){root.innerHTML='';err.style.display='block';err.innerHTML='<p>⚠️ '+e.message+'</p>'}})})});
-function init(){var R=window.React,RD=window.ReactDOM,LB=window.BosLightbox;if(!R||!RD||!LB){root.innerHTML='';err.style.display='block';return}
-var h=R.createElement,u=R.useState,items=[{url:'https://picsum.photos/seed/mountain/800/600',type:'image',name:'Mountain'},{url:'https://picsum.photos/seed/city/800/600',type:'image',name:'City'},{url:'https://picsum.photos/seed/ocean/800/600',type:'image',name:'Ocean'},{url:'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',type:'pdf',name:'report.pdf'},{url:'#',type:'other',name:'archive.zip'}],fi={pdf:'📄',video:'🎬',other:'📁'};
-function App(){var o=u(false),p=o[0],s=o[1],n=u(0),i=n[0],t=n[1];return h(R.Fragment,null,h('div',{className:'demo-grid'},items.map(function(it,j){return h('div',{key:j,className:'demo-card',onClick:function(){t(j);s(true)},title:'Open '+it.name},it.type==='image'?h('img',{className:'demo-card-img',src:it.url,alt:it.name,loading:'lazy'}):h('div',{className:'demo-card-fallback'},fi[it.type]||'📁'),h('div',{className:'demo-type-badge'},it.type),h('div',{className:'demo-card-label'},it.name))})),h(LB.BosLightbox||LB,{items:items,open:p,initialIndex:i,loop:true,thumbnails:true,onClose:function(){s(false)}}))}
-RD.createRoot(root).render(h(App))}
+// Live demo — load dependencies and bootstrap
+(function(){
+  var root = document.getElementById('demo-root');
+  var errorEl = document.getElementById('demo-error');
+  if (!root) return;
+
+  // Show loading state
+  root.innerHTML = '<div class="demo-loading"><div class="spinner"></div><span>Loading demo...</span></div>';
+
+  function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src; s.onload = cb; s.onerror = cb;
+    document.body.appendChild(s);
+  }
+
+  // Load React, ReactDOM, then bootstrap demo
+  loadScript('https://unpkg.com/react@18/umd/react.production.min.js', function() {
+    loadScript('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js', function() {
+      loadScript('bos-lightbox.umd.js', function() {
+        try {
+          bootstrapDemo();
+        } catch(e) {
+          root.innerHTML = '';
+          errorEl.style.display = 'block';
+          errorEl.innerHTML = '<p>⚠️ Demo error: ' + e.message + '</p>';
+        }
+      });
+    });
+  });
+
+  function bootstrapDemo() {
+    var R = window.React, RD = window.ReactDOM, LB = window.BosLightbox;
+    if (!R || !RD || !LB) {
+      root.innerHTML = '';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    var h = R.createElement;
+    var useState = R.useState;
+
+    var items = [
+      { url: 'https://picsum.photos/seed/mountain/800/600', type: 'image', name: 'Mountain landscape' },
+      { url: 'https://picsum.photos/seed/city/800/600', type: 'image', name: 'City skyline' },
+      { url: 'https://picsum.photos/seed/ocean/800/600', type: 'image', name: 'Ocean sunset' },
+      { url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', type: 'pdf', name: 'Sample report.pdf' },
+      { url: '#', type: 'other', name: 'archive.zip' },
+    ];
+
+    var fallbackIcons = { pdf: '📄', video: '🎬', other: '📁' };
+
+    function DemoApp() {
+      var _open = useState(false), open = _open[0], setOpen = _open[1];
+      var _index = useState(0), index = _index[0], setIndex = _index[1];
+
+      function openItem(i) {
+        setIndex(i);
+        setOpen(true);
+      }
+
+      return h(R.Fragment, null,
+        h('div', { className: 'demo-grid' },
+          items.map(function(item, i) {
+            var isImage = item.type === 'image';
+            return h('div', {
+              key: i,
+              className: 'demo-card',
+              onClick: function() { openItem(i); },
+              title: 'Open ' + item.name
+            },
+              isImage
+                ? h('img', { className: 'demo-card-img', src: item.url, alt: item.name, loading: 'lazy' })
+                : h('div', { className: 'demo-card-fallback' }, fallbackIcons[item.type] || '📁'),
+              h('div', { className: 'demo-type-badge' }, item.type),
+              h('div', { className: 'demo-card-label' }, item.name)
+            );
+          })
+        ),
+        h(LB.BosLightbox || LB, {
+          items: items,
+          open: open,
+          initialIndex: index,
+          loop: true,
+          thumbnails: true,
+          onClose: function() { setOpen(false); }
+        })
+      );
+    }
+
+    RD.createRoot(root).render(h(DemoApp));
+  }
 })();
 </script>
 </body>
