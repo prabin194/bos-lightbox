@@ -185,11 +185,6 @@ When `renderItem` is provided, it takes precedence over the built-in type-based 
 - Swipe left/right — Navigate between items
 - Tap on overlay — Close lightbox (if `closeOnOverlay` is `true`)
 
-## Touch Gestures
-
-- Swipe left/right — Navigate between items
-- Tap on overlay — Close lightbox (if `closeOnOverlay` is `true`)
-
 ## Browser Support
 
 - Chrome 54+
