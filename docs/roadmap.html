@@ -33,22 +33,35 @@ main{flex:1}.wrapper{max-width:900px;margin:0 auto;padding:0 28px;width:100%}
 .page-header .subtitle{color:var(--text2);margin-top:6px;font-size:15px}
 .page-header .last-updated{display:inline-block;margin-top:10px;font-size:12px;color:var(--text3);background:var(--surface2);padding:4px 12px;border-radius:999px}
 
-.phase{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem 2rem;margin-bottom:1.25rem;transition:border-color 0.2s}
-.phase:hover{border-color:var(--accent)}
-.phase .phase-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.phase .phase-name{font-size:1.1rem;font-weight:600;letter-spacing:-0.01em}
-.phase .phase-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:0.04em}
-.phase .phase-status.planned{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
-.phase .phase-status.in-progress{background:rgba(245,166,35,0.08);color:#d97706}
-.phase .phase-status.shipped{background:rgba(5,150,105,0.08);color:#059669}
-.dark .phase .phase-status.shipped{background:rgba(52,211,153,0.1);color:#34d399}
-.phase .phase-status.research{background:rgba(180,83,9,0.08);color:var(--accent)}
-.phase .phase-desc{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:1rem}
-.phase .phase-detail{list-style:none;padding:0}
-.phase .phase-detail li{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:13.5px;color:var(--text2);line-height:1.55}
-.phase .phase-detail li .bullet{flex-shrink:0;width:16px;text-align:center;color:var(--accent);margin-top:3px}
-section{padding:0 0 36px}
-section h2{font-size:12px;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+/* Timeline - matches changelogs style */
+.roadmap-timeline{list-style:none;padding:0;position:relative}
+.roadmap-timeline::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:2px;background:var(--border)}
+
+.section-label{padding:0 0 12px 64px;position:relative;margin-top:8px}
+.section-label:first-child{margin-top:0}
+.section-label h2{font-size:12px;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+.roadmap-entry{position:relative;padding:0 0 2rem 64px}
+.roadmap-entry:last-child{padding-bottom:0}
+.roadmap-entry .dot{position:absolute;left:16px;top:8px;width:18px;height:18px;border-radius:50%;background:var(--surface);border:2.5px solid var(--accent);z-index:1}
+.roadmap-entry .dot.in-progress{border-color:#d97706;background:rgba(217,119,6,0.12)}
+.roadmap-entry .dot.planned{border-color:var(--text3);background:var(--surface2)}
+.roadmap-entry .dot.shipped{border-color:#059669;background:rgba(5,150,105,0.1)}
+.roadmap-entry .dot.research{border-color:var(--accent);background:rgba(180,83,9,0.08)}
+
+.roadmap-entry .entry-header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.roadmap-entry .entry-name{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;color:var(--text)}
+.roadmap-entry .status-tag{display:inline-flex;font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.04em}
+.roadmap-entry .status-tag.in-progress{background:rgba(217,119,6,0.08);color:#d97706}
+.roadmap-entry .status-tag.planned{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.roadmap-entry .status-tag.shipped{background:rgba(5,150,105,0.08);color:#059669}
+.dark .roadmap-entry .status-tag.shipped{background:rgba(52,211,153,0.1);color:#34d399}
+.roadmap-entry .status-tag.research{background:rgba(180,83,9,0.08);color:var(--accent)}
+.roadmap-entry .entry-title{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:10px}
+.roadmap-entry .entry-items{list-style:none;padding:0}
+.roadmap-entry .entry-items li{display:flex;align-items:flex-start;gap:10px;padding:5px 0;font-size:14px;color:var(--text2);line-height:1.55}
+.roadmap-entry .entry-items li .emoji{flex-shrink:0;width:20px;text-align:center;font-size:14px;margin-top:2px}
+.roadmap-entry .entry-items li .desc{flex:1}
 
 .contribute-box{margin-top:28px;padding:1.5rem 2rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);text-align:center}
 .contribute-box p{font-size:14px;color:var(--text2);margin-bottom:12px}
@@ -65,6 +78,9 @@ footer a{color:var(--accent);text-decoration:none}
   nav{display:none}
   .wrapper{padding:0 16px}
   .page-header{padding:36px 0 20px}
+  .roadmap-entry{padding:0 0 1.5rem 56px}
+  .section-label{padding:0 0 10px 56px}
+  .roadmap-entry .entry-name{font-size:1rem}
 }
 </style>
 </head>
@@ -92,97 +108,111 @@ footer a{color:var(--accent);text-decoration:none}
 <span class="last-updated">Last updated: June 2026</span>
 </div>
 
-<section>
-<h2>🔄 Now — In progress</h2>
-<div class="phase">
-<div class="phase-header">
-<span class="phase-name">🧪 Test suite & Playwright E2E</span>
-<span class="phase-status in-progress">In progress</span>
-</div>
-<p class="phase-desc">Add comprehensive tests for the React component — unit tests with Vitest + jsdom and browser-level E2E tests with Playwright for dialog behavior, keyboard nav, and touch support.</p>
-<ul class="phase-detail">
-<li><span class="bullet">•</span><span class="text">Component unit tests for controlled open/close, item navigation, zoom, keyboard events.</span></li>
-<li><span class="bullet">•</span><span class="text">Playwright tests for native dialog showModal/close behavior across browsers.</span></li>
-<li><span class="bullet">•</span><span class="text">Accessibility testing with axe-core integration.</span></li>
-</ul>
-</div>
-</section>
+<ul class="roadmap-timeline">
 
-<section>
-<h2>⏳ Next — Planned</h2>
-<div class="phase">
-<div class="phase-header">
-<span class="phase-name">📖 Storybook stories & visual regressions</span>
-<span class="phase-status planned">Planned</span>
-</div>
-<p class="phase-desc">Build Storybook stories for every prop combination — modal, inline, images, PDFs, zoom, download, dark overlay, edge cases.</p>
-<ul class="phase-detail">
-<li><span class="bullet">•</span><span class="text">Stories for all display modes, item types, and navigation options.</span></li>
-<li><span class="bullet">•</span><span class="text">Chromatic visual regression testing to catch unintended style changes.</span></li>
-</ul>
-</div>
-<div class="phase">
-<div class="phase-header">
-<span class="phase-name">🎨 Theming via CSS custom properties</span>
-<span class="phase-status planned">Planned</span>
-</div>
-<p class="phase-desc">Expose CSS custom properties for easy styling — overlay background, backdrop blur, button colors, animation speeds.</p>
-<ul class="phase-detail">
-<li><span class="bullet">•</span><span class="text">Define and document all CSS variables for the component.</span></li>
-<li><span class="bullet">•</span><span class="text">Add a light/dark mode example to documentation.</span></li>
-</ul>
-</div>
-</section>
+<li class="section-label"><h2>🔄 Now — In progress</h2></li>
 
-<section>
-<h2>🔭 Later — Under research</h2>
-<div class="phase">
-<div class="phase-header">
-<span class="phase-name">⚡ React 19 & concurrent features</span>
-<span class="phase-status research">Research</span>
+<li class="roadmap-entry">
+<div class="dot in-progress"></div>
+<div class="entry-header">
+<span class="entry-name">🧪 Test suite &amp; Playwright E2E</span>
+<span class="status-tag in-progress">In progress</span>
 </div>
-<p class="phase-desc">Test and certify compatibility with React 19. Evaluate useActionState or other React 19 APIs for closer form integration.</p>
-</div>
-</section>
+<p class="entry-title">Add comprehensive tests — unit tests with Vitest + jsdom and browser-level E2E tests with Playwright for dialog behavior, keyboard nav, and touch support.</p>
+<ul class="entry-items">
+<li><span class="emoji">🧪</span><span class="desc">Component unit tests for controlled open/close, item navigation, zoom, keyboard events.</span></li>
+<li><span class="emoji">🎭</span><span class="desc">Playwright tests for native dialog showModal/close behavior across browsers.</span></li>
+<li><span class="emoji">♿</span><span class="desc">Accessibility testing with axe-core integration.</span></li>
+</ul>
+</li>
 
-<section>
-<h2>✅ Shipped</h2>
-<div class="phase" style="opacity:0.75">
-<div class="phase-header">
-<span class="phase-name">📦 React component with native dialog</span>
-<span class="phase-status shipped">Shipped</span>
+<li class="section-label"><h2>⏳ Next — Planned</h2></li>
+
+<li class="roadmap-entry">
+<div class="dot planned"></div>
+<div class="entry-header">
+<span class="entry-name">📖 Storybook stories &amp; visual regressions</span>
+<span class="status-tag planned">Planned</span>
 </div>
-<p class="phase-desc">Pure React implementation with forwardRef API, native &lt;dialog&gt; modal mode, and zero runtime dependencies.</p>
+<p class="entry-title">Build Storybook stories for every prop combination — modal, inline, images, PDFs, zoom, download, dark overlay, edge cases.</p>
+<ul class="entry-items">
+<li><span class="emoji">📚</span><span class="desc">Stories for all display modes, item types, and navigation options.</span></li>
+<li><span class="emoji">🖼️</span><span class="desc">Chromatic visual regression testing to catch unintended style changes.</span></li>
+</ul>
+</li>
+
+<li class="roadmap-entry">
+<div class="dot planned"></div>
+<div class="entry-header">
+<span class="entry-name">🎨 Theming via CSS custom properties</span>
+<span class="status-tag planned">Planned</span>
 </div>
-<div class="phase" style="opacity:0.75">
-<div class="phase-header">
-<span class="phase-name">🖼️ Image/PDF/video support</span>
-<span class="phase-status shipped">Shipped</span>
+<p class="entry-title">Expose CSS custom properties for easy styling — overlay background, backdrop blur, button colors, animation speeds.</p>
+<ul class="entry-items">
+<li><span class="emoji">🎨</span><span class="desc">Define and document all CSS variables for the component.</span></li>
+<li><span class="emoji">🌗</span><span class="desc">Add a light/dark mode example to documentation.</span></li>
+</ul>
+</li>
+
+<li class="section-label"><h2>🔭 Later — Under research</h2></li>
+
+<li class="roadmap-entry">
+<div class="dot research"></div>
+<div class="entry-header">
+<span class="entry-name">⚡ React 19 &amp; concurrent features</span>
+<span class="status-tag research">Research</span>
 </div>
-<p class="phase-desc">Four item types: image with zoom & drag-to-pan, PDF with iframe, video with native controls, and fallback with download prompt.</p>
+<p class="entry-title">Test and certify compatibility with React 19. Evaluate useActionState or other React 19 APIs for closer form integration.</p>
+</li>
+
+<li class="section-label"><h2>✅ Shipped</h2></li>
+
+<li class="roadmap-entry" style="opacity:0.75">
+<div class="dot shipped"></div>
+<div class="entry-header">
+<span class="entry-name">📦 React component with native dialog</span>
+<span class="status-tag shipped">Shipped</span>
 </div>
-<div class="phase" style="opacity:0.75">
-<div class="phase-header">
-<span class="phase-name">⌨️ Keyboard & touch navigation</span>
-<span class="phase-status shipped">Shipped</span>
+<p class="entry-title">Pure React implementation with forwardRef API, native &lt;dialog&gt; modal mode, and zero runtime dependencies.</p>
+</li>
+
+<li class="roadmap-entry" style="opacity:0.75">
+<div class="dot shipped"></div>
+<div class="entry-header">
+<span class="entry-name">🖼️ Image/PDF/video support</span>
+<span class="status-tag shipped">Shipped</span>
 </div>
-<p class="phase-desc">Arrow key navigation, swipe gestures, Escape to close, circular loop mode, and slideshow auto-play with configurable interval.</p>
+<p class="entry-title">Four item types: image with zoom &amp; drag-to-pan, PDF with iframe, video with native controls, and fallback with download prompt.</p>
+</li>
+
+<li class="roadmap-entry" style="opacity:0.75">
+<div class="dot shipped"></div>
+<div class="entry-header">
+<span class="entry-name">⌨️ Keyboard &amp; touch navigation</span>
+<span class="status-tag shipped">Shipped</span>
 </div>
-<div class="phase" style="opacity:0.75">
-<div class="phase-header">
-<span class="phase-name">🖼️ Thumbnail strip for visual nav</span>
-<span class="phase-status shipped">Shipped</span>
+<p class="entry-title">Arrow key navigation, swipe gestures, Escape to close, circular loop mode, and slideshow auto-play with configurable interval.</p>
+</li>
+
+<li class="roadmap-entry" style="opacity:0.75">
+<div class="dot shipped"></div>
+<div class="entry-header">
+<span class="entry-name">🖼️ Thumbnail strip for visual nav</span>
+<span class="status-tag shipped">Shipped</span>
 </div>
-<p class="phase-desc">Horizontal scrollable thumbnail strip at the bottom for quick visual navigation between items. Shows image previews or type icons.</p>
+<p class="entry-title">Horizontal scrollable thumbnail strip at the bottom for quick visual navigation between items.</p>
+</li>
+
+<li class="roadmap-entry" style="opacity:0.75">
+<div class="dot shipped"></div>
+<div class="entry-header">
+<span class="entry-name">🎭 Animations &amp; custom rendering</span>
+<span class="status-tag shipped">Shipped</span>
 </div>
-<div class="phase" style="opacity:0.75">
-<div class="phase-header">
-<span class="phase-name">🎭 Animations & custom rendering</span>
-<span class="phase-status shipped">Shipped</span>
-</div>
-<p class="phase-desc">Fade animations on open/close and item transitions. Custom renderItem prop for complete control over content rendering. Inline mode Escape & overlay close.</p>
-</div>
-</section>
+<p class="entry-title">Fade animations on open/close and item transitions. Custom renderItem prop for complete control. Inline mode Escape &amp; overlay close.</p>
+</li>
+
+</ul>
 
 <div class="contribute-box">
 <p>Have an idea for the roadmap? Found a bug? Contributions are welcome!</p>
